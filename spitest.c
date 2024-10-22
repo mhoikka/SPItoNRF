@@ -65,8 +65,6 @@ Distributed as-is; no warranty is given.
 #include <wiringPiSPI.h>
 #include <unistd.h>
 
-using namespace std;
-
 // channel is the wiringPi name for the chip select (or chip enable) pin.
 // Set this to 0 or 1, depending on how it's connected.
 static const int CHANNEL = 0;
@@ -89,7 +87,7 @@ int main()
    printf("Init result: \n");
    printf("%d\n", fd);
 
-   len = sizeof(buffer)/sizeof(buffer[0]);
+   int len = sizeof(buffer)/sizeof(buffer[0]);
    readwriteNRF_SPI(CONFIG_REG, buffer, len, READ_REG_NRF);
    sleep(1);
    readwriteNRF_SPI(CONFIG_REG, buffer, len, WRITE_REG_NRF);
