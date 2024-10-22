@@ -69,64 +69,57 @@ using namespace std;
 
 // channel is the wiringPi name for the chip select (or chip enable) pin.
 // Set this to 0 or 1, depending on how it's connected.
-static const int CHANNEL = 1;
+static const int CHANNEL = 0;
+unsigned char CONFIG_REG = 0x00;
+unsigned char WRITE_REG_NRF = 0x20; //write command for NRF24L01+
+unsigned char READ_REG_NRF = 0x00; //read command for NRF24L01+
 
 int main()
 {
    int fd, result;
-   unsigned char buffer[100];
+   unsigned char buffer[1]; //is this the right size?
 
    cout << "Initializing" << endl ;
 
    // Configure the interface.
    // CHANNEL insicates chip select,
    // 500000 indicates bus speed.
-   fd = wiringPiSPISetup(CHANNEL, 500000);
+   fd = wiringPiSPISetup(CHANNEL, 500000); 
 
    cout << "Init result: " << fd << endl;
 
-   // clear display
-   buffer[0] = 0x76;
-   wiringPiSPIDataRW(CHANNEL, buffer, 1);
-
-   sleep(5);
-
-   // Do a one-hot bit selection for each field of the display
-   // It displays gibberish, but tells us that we're correctly addressing all 
-   // of the segments.
-   for(int i = 1; i <= 0x7f; i <<= 1)
-   {
-      // the decimals, colon and apostrophe dots
-      buffer[0] = 0x77;
-      buffer[1] = i;
-      result = wiringPiSPIDataRW(CHANNEL, buffer, 2);
-
-      // The first character
-      buffer[0] = 0x7b;
-      buffer[1] = i;
-      result = wiringPiSPIDataRW(CHANNEL, buffer, 2);
-
-      // The second character
-      buffer[0] = 0x7c;
-      buffer[1] = i;
-      result = wiringPiSPIDataRW(CHANNEL, buffer, 2);
-
-      // The third character
-      buffer[0] = 0x7d;
-      buffer[1] = i;
-      result = wiringPiSPIDataRW(CHANNEL, buffer, 2);
-
-      // The last character
-      buffer[0] = 0x7e;
-      buffer[1] = i;
-      result = wiringPiSPIDataRW(CHANNEL, buffer, 2);
-
-      // Pause so we can see them
-      sleep(5);
-   }
-
-   // clear display again
-   buffer[0] = 0x76;
-   wiringPiSPIDataRW(CHANNEL, buffer, 1);
-
+   len = sizeof(buffer)/sizeof(buffer[0];
+   readwriteNRF_SPI(CONFIG_REG, buffer, len, READ_REG_NRF);
+   sleep(1);
+   readwriteNRF_SPI(CONFIG_REG, buffer, len, WRITE_REG_NRF);
+   sleep(1);
+   readwriteNRF_SPI(CONFIG_REG, buffer, len, READ_REG_NRF);
 }
+
+/**
+ * @brief reads from the SPI bus
+ * @param reg_addr: Address of the register where data is going to be read from
+ * @param buffer: Pointer to data buffer that stores the data read
+ * @param len: Number of bytes of data to be read
+ */
+void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){
+    unsigned char new_buffer[len+1];
+	int result;
+	
+	new_buffer[0] = command | reg_addr; 
+	
+	std::copy(&buffer[0], &buffer[len-1], &new_buffer[1]);
+	
+	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, len);
+	//result is unused at present
+}
+
+
+
+
+
+
+
+
+
+
