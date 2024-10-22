@@ -61,6 +61,7 @@ Distributed as-is; no warranty is given.
 ******************************************************************************/
 
 #include <stdio.h>
+#include <string.h>
 #include <errno.h>
 #include <wiringPiSPI.h>
 #include <unistd.h>
