@@ -60,7 +60,7 @@ local, and you've found our code helpful, please buy us a round!
 Distributed as-is; no warranty is given.
 ******************************************************************************/
 
-#include <iostream>
+#include <stdio.h>
 #include <errno.h>
 #include <wiringPiSPI.h>
 #include <unistd.h>
@@ -79,14 +79,15 @@ int main()
    int fd, result;
    unsigned char buffer[1]; //is this the right size?
 
-   cout << "Initializing" << endl ;
+   printf("Initializing\n");
 
    // Configure the interface.
    // CHANNEL insicates chip select,
    // 500000 indicates bus speed.
    fd = wiringPiSPISetup(CHANNEL, 500000); 
 
-   cout << "Init result: " << fd << endl;
+   printf("Init result: \n");
+   printf("%d\n", fd);
 
    len = sizeof(buffer)/sizeof(buffer[0];
    readwriteNRF_SPI(CONFIG_REG, buffer, len, READ_REG_NRF);
