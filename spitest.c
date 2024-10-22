@@ -110,7 +110,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
 	new_buffer[0] = command | reg_addr; 
 	
 	// Copy source array to destination array with offset
-    std::memcpy(new_buffer + 1, buffer, len * sizeof(unsigned char));
+    memcpy(new_buffer + 1, buffer, len * sizeof(unsigned char));
 	
 	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, len);
 	//result is unused at present
