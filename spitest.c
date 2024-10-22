@@ -89,7 +89,7 @@ int main()
    printf("Init result: \n");
    printf("%d\n", fd);
 
-   len = sizeof(buffer)/sizeof(buffer[0];
+   len = sizeof(buffer)/sizeof(buffer[0]);
    readwriteNRF_SPI(CONFIG_REG, buffer, len, READ_REG_NRF);
    sleep(1);
    readwriteNRF_SPI(CONFIG_REG, buffer, len, WRITE_REG_NRF);
@@ -109,7 +109,8 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
 	
 	new_buffer[0] = command | reg_addr; 
 	
-	std::copy(&buffer[0], &buffer[len-1], &new_buffer[1]);
+	// Copy source array to destination array with offset
+    std::memcpy(new_buffer + 1, buffer, len * sizeof(unsigned char));
 	
 	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, len);
 	//result is unused at present
