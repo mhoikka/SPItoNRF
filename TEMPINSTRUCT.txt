@@ -1,0 +1,29 @@
+sudo apt-get install git-core
+gpio -v DID NOT EXIST
+
+sudo apt-get install --only-upgrade gpio
+
+sudo apt-get purge wiringpi
+hash -r
+git clone https://github.com/WiringPi/WiringPi.git
+cd WiringPi
+git pull origin
+./build
+
+gpio -v
+gpio readall
+
+
+You can use the Desktop GUI by heading to the Pi Start Menu > Preferences > Raspberry Pi Configuration.
+A window will pop up with different tabs to adjust settings. What we are interested is the Interfaces tab. Click on the tab and select Enable for SPI. At this point, you can enable additional interfaces depending on your project needs. Click on the OK button to save.
+We recommend restarting your Pi to ensure that the changes to take effect. Click on the Pi Start Menu > Preferences > Shutdown. Since we just need to restart, click on the Restart button.
+
+ls /dev/*spi*
+
+
+
+navigate to directory
+gcc spitest.cpp -l wiringPi -o spitest
+
+
+

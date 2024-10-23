@@ -90,9 +90,7 @@ int main()
 
    int len = sizeof(buffer)/sizeof(buffer[0]);
    readwriteNRF_SPI(CONFIG_REG, buffer, len, READ_REG_NRF);
-   sleep(1);
    readwriteNRF_SPI(CONFIG_REG, buffer, len, WRITE_REG_NRF);
-   sleep(1);
    readwriteNRF_SPI(CONFIG_REG, buffer, len, READ_REG_NRF);
 }
 
