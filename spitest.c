@@ -110,12 +110,13 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     // memcpy(new_buffer + 1, buffer, len * sizeof(unsigned char));
 	
     // Copy elements from array1 to array2 starting at index 1
-    // memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
+    memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
 
     // Copy elements from array1 to array2 starting at index 1
+    /*
     for (int i = 0; i < len; i++) {
         new_buffer[i + 1] = buffer[i];
-    }
+    }*/
 
 	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, len+1);
 	//result is unused at present
