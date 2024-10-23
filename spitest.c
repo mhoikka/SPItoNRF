@@ -76,7 +76,7 @@ unsigned char READ_REG_NRF = 0x00; //read command for NRF24L01+
 int main()
 {
    int fd, result;
-   unsigned char buffer[1] = {0}; //is this the right size?
+   unsigned char buffer[1] = {1}; //is this the right size?
 
    printf("Initializing\n");
 
