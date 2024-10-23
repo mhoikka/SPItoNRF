@@ -76,7 +76,7 @@ unsigned char READ_REG_NRF = 0x00; //read command for NRF24L01+
 int main()
 {
    int fd, result;
-   unsigned char buffer[1]; //is this the right size?
+   unsigned char buffer[1] = {0}; //is this the right size?
 
    printf("Initializing\n");
 
@@ -107,8 +107,16 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
 	new_buffer[0] = command | reg_addr; 
 	
 	// Copy source array to destination array with offset
-    memcpy(new_buffer + 1, buffer, len * sizeof(unsigned char));
+    // memcpy(new_buffer + 1, buffer, len * sizeof(unsigned char));
 	
+    // Copy elements from array1 to array2 starting at index 1
+    // memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
+
+    // Copy elements from array1 to array2 starting at index 1
+    for (int i = 0; i < len; i++) {
+        new_buffer[i + 1] = buffer[i];
+    }
+
 	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, len+1);
 	//result is unused at present
 }
