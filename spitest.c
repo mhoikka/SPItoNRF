@@ -105,6 +105,9 @@ int main()
     printf("%d\n", fd);
 
     int len = sizeof(buffer)/sizeof(buffer[0]);
+
+    // Initialize WiringPi
+    wiringPiSetup();
     pinMode(8, OUTPUT); //set CE pin to output //WHICH PIN IS CE?
     pinMode(9, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
 
