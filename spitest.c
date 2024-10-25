@@ -65,6 +65,7 @@ Distributed as-is; no warranty is given.
 #include <errno.h>
 #include <wiringPiSPI.h>
 #include <unistd.h>
+#include <time.h>
 
 // channel is the wiringPi name for the chip select (or chip enable) pin.
 // Set this to 0 or 1, depending on how it's connected.
@@ -107,7 +108,7 @@ int main()
     pinMode(8, OUTPUT); //set CE pin to output //WHICH PIN IS CE?
     pinMode(9, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
 
-    delay_microseconds(1000*100); //give the chip time to power up
+    delay(100); //give the chip time to power up
     receiveByteNRF(buffer);
 
     printf("Data: \n");
@@ -162,13 +163,13 @@ void receiveByteNRF(unsigned char data){
     //write data to be transmitted into TX FIFO
     readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF);
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
-    delay_microseconds(1.5*1000); 
+    delay(2); 
 
     digitalWrite(8, HIGH); //enable chip to receive data
-    delay_microseconds(130);
+    delay(1);
     Delay(1);
     while(digitalRead(9)){ //wait for data to be received (IRQ pin is active low)
-        delay_microseconds(100*1000);  //TODO add better delay function with millisecond precision
+        delay(100);  //TODO add better delay function with millisecond precision
     }          
     digitalWrite(9, HIGH); //undo interrupt signal
 
@@ -182,17 +183,18 @@ void receiveByteNRF(unsigned char data){
 
 /**
  * @brief  Delay function 
- * @param  usec: specifies the delay time length, in 1 microsecond.
+ * @param  milliseconds: specifies the delay time length, in 1 millisecond.
  * @retval None
  */
-void __attribute__((optimize("O0"))) delay_microseconds(unsigned int usec){
-  for(volatile unsigned int counter = 0; counter < usec; counter++){
-    //do nothing NOP instructions
-    __NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
-    __NOP();__NOP();__NOP();__NOP();__NOP();__NOP();
-    __NOP();__NOP();__NOP();__NOP();__NOP();
-    //lol this is nearly perfect timing
-  }
+void delay(int milliseconds)
+{
+    long pause;
+    clock_t now,then;
+
+    pause = milliseconds*(CLOCKS_PER_SEC/1000);
+    now = then = clock();
+    while( (now-then) < pause )
+        now = clock();
 }
 
 
