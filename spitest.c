@@ -167,7 +167,7 @@ void receiveByteNRF(unsigned char data){
 
     digitalWrite(8, HIGH); //enable chip to receive data
     delay(1);
-    Delay(1);
+    delay(1);
     while(digitalRead(9)){ //wait for data to be received (IRQ pin is active low)
         delay(100);  //TODO add better delay function with millisecond precision
     }          
@@ -177,7 +177,6 @@ void receiveByteNRF(unsigned char data){
     digitalWrite(8, LOW); //switch chip to standby mode by disabling CE pin
 
     printf("Data received: %d\n", buffer[0]);
-    set_nrf24_SPI_CE(0); //disable chip after reception
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
 }
 
