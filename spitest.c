@@ -82,6 +82,12 @@ unsigned char TX_ADDR = 0x10;
 unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
 unsigned char READ_PAYLOAD_NRF = 0x60;
 
+//WiringPi constants
+unsigned char HIGH = 1;
+unsigned char LOW = 0;
+unsigned char OUTPUT = 1;
+unsigned char INPUT = 0;
+
 int main()
 {
     int fd, result;
