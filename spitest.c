@@ -155,7 +155,8 @@ void receiveByteNRF(unsigned char data){
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
     //write data to be transmitted into TX FIFO
     readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF);
-    readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode
+    readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
+    delay_microseconds(1.5*1000); 
 
     digitalWrite(8, HIGH); //enable chip to receive data
     delay_microseconds(130);
