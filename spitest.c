@@ -204,7 +204,9 @@ void receiveByteNRF(){
     //clear max_rt from mrf24l01+ status register
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); 
+    delay(1);
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
+    delay(1);
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF); 
     //commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
 
