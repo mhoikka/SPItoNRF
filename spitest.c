@@ -197,6 +197,8 @@ void receiveByteNRF(){
     unsigned char clear = 0x70;
     unsigned char dummydata = 0xFF;
 
+    commandNRF_SPI(FLUSH_RX_NRF); //send command to flush TX FIFO
+    commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
     //readwriteNRF_SPI(STATUS, &clear, 1, WRITE_REG_NRF); //Clear RX IRQ
     //clear max_rt from mrf24l01+ status register
