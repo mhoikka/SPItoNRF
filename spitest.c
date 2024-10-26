@@ -194,8 +194,8 @@ void receiveByteNRF(unsigned char data){
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P01, &rxAddress, 3, WRITE_REG_NRF); //set read address
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
-    //write data to be transmitted into TX FIFO
-    readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF);
+    
+    //readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF); //write data to be transmitted into TX FIFO
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
     delay(2); 
 
@@ -203,7 +203,7 @@ void receiveByteNRF(unsigned char data){
     delay(1);
     delay(1);
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        delay(100);  //TODO add better delay function with millisecond precision
+        delay(1);  //TODO add better delay function with millisecond precision
     }          
     digitalWrite(3, HIGH); //undo interrupt signal
 
