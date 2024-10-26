@@ -172,6 +172,7 @@ void commandNRF_SPI(unsigned char command){
     }*/
 
 	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, 1);
+    printf("Data received inside SPI function: %d\n", new_buffer[0]);
 	//result is unused at present
 }
 
