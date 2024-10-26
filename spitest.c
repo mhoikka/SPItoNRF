@@ -202,9 +202,9 @@ void receiveByteNRF(){
     //set control registers
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); 
-    delay(1);
+    my_delay(1);
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
-    delay(1);
+    my_delay(1);
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF); 
 
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
@@ -214,14 +214,14 @@ void receiveByteNRF(){
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
     
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
-    delay(200); 
+    my_delay(200); 
 
 
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
-    delay(1);
-    delay(1);
+    my_delay(1);
+    my_delay(1);
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        delay(1);  //TODO add better delay function
+        my_delay(1);  //TODO add better delay function
     }          
     //digitalWrite(3, HIGH); //undo interrupt signal
     //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
