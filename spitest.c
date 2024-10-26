@@ -79,7 +79,7 @@ unsigned char ENAA = 0x01;
 unsigned char STATUS = 0x07;
 unsigned char SETUP_AW = 0x03;
 unsigned char RF_SETUP = 0x06;
-unsigned char RX_ADDR_P01 = 0x0A;
+unsigned char RX_ADDR_P0 = 0x0A;
 unsigned char RX_PW_P0 = 0x11;
 unsigned char TX_ADDR = 0x10;
 unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
@@ -116,7 +116,7 @@ int main()
     pinMode(3, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
 
     delay(200); //give the chip time to power on
-    receiveByteNRF(buffer);
+    receiveByteNRF();
 }
 
 /**
