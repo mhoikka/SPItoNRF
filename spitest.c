@@ -128,7 +128,7 @@ int main()
  * @param buffer: Pointer to data buffer that stores the data read
  * @param len: Number of bytes of data to be read
  */
-void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){
+unsigned char * readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){
     unsigned char new_buffer[len+1];
 	int result;
 	
@@ -147,6 +147,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     }*/
 
 	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, len+1);
+    memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
 	//result is unused at present
 }
 
@@ -173,7 +174,6 @@ void commandNRF_SPI(unsigned char command){
     }*/
 
 	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, 1);
-    printf("Data received inside SPI function: %d\n", new_buffer[0]);
 	//result is unused at present
 }
 
