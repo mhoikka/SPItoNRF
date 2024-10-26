@@ -196,9 +196,12 @@ void receiveByteNRF(){
     unsigned char clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
     unsigned char clear = 0x01;
 
-    commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
-    readwriteNRF_SPI(STATUS, &clear, 1, WRITE_REG_NRF); //Clear RX IRQ
+    //readwriteNRF_SPI(STATUS, &clear, 1, WRITE_REG_NRF); //Clear RX IRQ
+    //clear max_rt from mrf24l01+ status register
+    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //Clear RX IRQ
+    commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
+
     //readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //Clear RX IRQ
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
