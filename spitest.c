@@ -219,7 +219,7 @@ void receiveByteNRF(unsigned char data){
  * @param  milliseconds: specifies the delay time length, in 1 millisecond.
  * @retval None
  */
-void delay(int milliseconds)
+void my_delay(int milliseconds)
 {
     long pause;
     clock_t now,then;
