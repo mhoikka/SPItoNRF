@@ -205,7 +205,8 @@ void receiveByteNRF(unsigned char data){
     //while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
         //delay(1);  //TODO add better delay function with millisecond precision
     //}          
-    digitalWrite(3, HIGH); //undo interrupt signal
+    //digitalWrite(3, HIGH); //undo interrupt signal
+    delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
     digitalWrite(2, LOW); //switch chip to standby mode by disabling CE pin
