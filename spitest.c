@@ -111,8 +111,8 @@ int main()
     // Initialize WiringPi 
     wiringPiSetup();
 
-    pinMode(8, OUTPUT); //set CE pin to output //WHICH PIN IS CE?
-    pinMode(9, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
+    pinMode(2, OUTPUT); //set CE pin to output //WHICH PIN IS CE?
+    pinMode(3, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
 
     delay(100); //give the chip time to power up
     receiveByteNRF(buffer);
@@ -199,16 +199,16 @@ void receiveByteNRF(unsigned char data){
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
     delay(2); 
 
-    digitalWrite(8, HIGH); //enable chip to receive data by setting CE HIGH
+    digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
     delay(1);
     delay(1);
-    while(digitalRead(9)){ //wait for data to be received (IRQ pin is active low)
+    while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
         delay(100);  //TODO add better delay function with millisecond precision
     }          
-    digitalWrite(9, HIGH); //undo interrupt signal
+    digitalWrite(3, HIGH); //undo interrupt signal
 
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
-    digitalWrite(8, LOW); //switch chip to standby mode by disabling CE pin
+    digitalWrite(2, LOW); //switch chip to standby mode by disabling CE pin
 
     printf("Data received: %d\n", buffer[0]);
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
