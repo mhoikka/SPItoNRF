@@ -117,7 +117,7 @@ int main()
     pinMode(2, OUTPUT); //set CE pin to output
     pinMode(3, INPUT); //set IRQ pin to input
 
-    digitalWrite(3, LOW); //test interrupt signal
+    digitalWrite(2, LOW); //test interrupt signal
 
     delay(200); //give the chip time to power on
     //receiveByteNRF();
