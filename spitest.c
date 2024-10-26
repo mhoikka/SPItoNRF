@@ -191,11 +191,13 @@ void receiveByteNRF(){
     unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
     unsigned char configPowerDown = 0x09; // Variable to hold the power down config
     unsigned char rxAddress[] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
-    unsigned char clear_irqs = 0x70; // Variable to hold the clear RX IRQ value for the status register
+    unsigned char clear_irqs = 0x40; // Variable to hold the clear RX IRQ value for the status register
+    unsigned char clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
     
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
     readwriteNRF_SPI(STATUS, &clear_irqs, 1, WRITE_REG_NRF); //Clear RX IRQ
+    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //Clear RX IRQ
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
     readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
