@@ -208,9 +208,9 @@ void receiveByteNRF(){
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
     delay(1);
     delay(1);
-    //while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        delay(3000);  //TODO add better delay function
-    //}          
+    while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
+        delay(1);  //TODO add better delay function
+    }          
     digitalWrite(3, HIGH); //undo interrupt signal
     //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
