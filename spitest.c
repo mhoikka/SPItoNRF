@@ -43,10 +43,7 @@ int main()
     int len = sizeof(buffer)/sizeof(buffer[0]);
 
     // Initialize WiringPi 
-    if (wiringPiSetupGpio() == -1) {
-        printf("Failed to initialize WiringPi\n");
-        return 1;
-    }
+    wiringPiSetup();
 
     pinMode(2, OUTPUT); //set CE pin to output
     pinMode(3, INPUT); //set IRQ pin to input
