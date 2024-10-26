@@ -203,14 +203,14 @@ void receiveByteNRF(){
     
     //readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF); //write data to be transmitted into TX FIFO
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
-    delay(100); 
+    delay(200); 
 
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
     delay(1);
     delay(1);
-    while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        delay(1);  //TODO add better delay function
-    }          
+    //while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
+        delay(1000);  //TODO add better delay function
+    //}          
     digitalWrite(3, HIGH); //undo interrupt signal
     //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
