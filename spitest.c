@@ -200,24 +200,19 @@ void receiveByteNRF(){
     commandNRF_SPI(FLUSH_RX_NRF); //send command to flush TX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
-    //readwriteNRF_SPI(STATUS, &clear, 1, WRITE_REG_NRF); //Clear RX IRQ
-    //clear max_rt from mrf24l01+ status register
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); 
     delay(1);
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
     delay(1);
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF); 
-    //commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
 
-    //readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //Clear RX IRQ
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
     readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
     
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
     
-    //readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF); //write data to be transmitted into TX FIFO
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
     delay(200); 
 
@@ -228,11 +223,11 @@ void receiveByteNRF(){
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
         delay(1);  //TODO add better delay function
     }          
-    digitalWrite(3, HIGH); //undo interrupt signal
+    //digitalWrite(3, HIGH); //undo interrupt signal
     //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
-    digitalWrite(2, LOW); //switch chip to standby mode by disabling CE pin
+    digitalWrite(2, LOW); //switch chip to standby mode by setting CE pin low
 
     printf("Data received: %d\n", buffer[0]);
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
