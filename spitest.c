@@ -82,6 +82,7 @@ unsigned char RX_PW_P0 = 0x11;
 unsigned char TX_ADDR = 0x10;
 unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
 unsigned char READ_PAYLOAD_NRF = 0x60;
+unsigned char FLUSH_TX_NRF = 0xE1;
 
 //WiringPi constants
 unsigned char HIGH = 1;
@@ -146,6 +147,32 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
 	//result is unused at present
 }
 
+/**
+ * @brief Send command to NRF24L01+ 
+ * @param command: Command to be sent to the NRF24L01+
+ */
+void commandNRF_SPI(unsigned char command){
+    unsigned char new_buffer[1];
+	int result;
+	
+	new_buffer[0] = command; 
+	
+	// Copy source array to destination array with offset
+    // memcpy(new_buffer + 1, buffer, len * sizeof(unsigned char));
+	
+    // Copy elements from array1 to array2 starting at index 1
+    //memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
+
+    // Copy elements from array1 to array2 starting at index 1
+    /*
+    for (int i = 0; i < len; i++) {
+        new_buffer[i + 1] = buffer[i];
+    }*/
+
+	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, 1);
+	//result is unused at present
+}
+
 /** 
 * @brief: transmits a byte of data for testing purposes
 * @param: data byte of data to be transmitted
@@ -160,6 +187,7 @@ void receiveByteNRF(unsigned char data){
     unsigned char configPowerDown = 0x09; // Variable to hold the power down config
     unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
 
+    commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P01, &rxAddress, 3, WRITE_REG_NRF); //set read address
