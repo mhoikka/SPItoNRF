@@ -104,7 +104,7 @@ int main()
     // 500000 indicates bus speed.
     fd = wiringPiSPISetup(CHANNEL, 500000); 
 
-    printf("Init result: \n");
+    printf("Init result: ");
     printf("%d\n", fd);
 
     int len = sizeof(buffer)/sizeof(buffer[0]);
@@ -117,9 +117,6 @@ int main()
 
     delay(200); //give the chip time to power on
     receiveByteNRF(buffer);
-
-    printf("Data: ");
-    printf("%d\n", buffer[0]);
 }
 
 /**
