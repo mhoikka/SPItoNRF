@@ -110,7 +110,7 @@ int main()
     printf("%d\n", fd);
 
     int len = sizeof(buffer)/sizeof(buffer[0]);
-
+    int pinState = 1;
     // Initialize WiringPi 
     wiringPiSetupGpio();
 
@@ -120,6 +120,10 @@ int main()
     digitalWrite(2, LOW); //test interrupt signal
 
     delay(200); //give the chip time to power on
+
+    pinState = digitalRead(2); //test interrupt signal
+    printf("Pin 2 state: ");
+    printf("%d\n", pinState);
     //receiveByteNRF();
 }
 
