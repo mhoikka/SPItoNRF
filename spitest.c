@@ -197,7 +197,7 @@ void receiveByteNRF(){
     //set control registers
     readwriteNRF_SPI(STATUS, &clearIRQ, 1, WRITE_REG_NRF); //Clear RX IRQ
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
-    readwriteNRF_SPI(RX_ADDR_P0, &rxAddress, 3, WRITE_REG_NRF); //set read address
+    readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
     readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
     
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
