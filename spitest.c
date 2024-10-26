@@ -92,6 +92,8 @@ unsigned char FLUSH_TX_NRF = 0xE1;
 //unsigned char OUTPUT = 1;
 //unsigned char INPUT = 0;
 
+void receiveByteNRF();
+
 int main()
 {
     int fd, result;
