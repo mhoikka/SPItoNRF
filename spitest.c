@@ -134,7 +134,6 @@ void receiveByteNRF() {
     printf("Data received: %d\n", buffer[0]);
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
 }
-void receiveByteNRF();
 
 int main()
 {
