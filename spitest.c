@@ -114,7 +114,7 @@ int main()
     pinMode(2, OUTPUT); //set CE pin to output //WHICH PIN IS CE?
     pinMode(3, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
 
-    delay(100); //give the chip time to power up
+    delay(200); //give the chip time to power on
     receiveByteNRF(buffer);
 
     printf("Data: \n");
@@ -197,14 +197,14 @@ void receiveByteNRF(unsigned char data){
     
     //readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF); //write data to be transmitted into TX FIFO
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
-    delay(2); 
+    delay(3); 
 
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
     delay(1);
     delay(1);
-    while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        delay(1);  //TODO add better delay function with millisecond precision
-    }          
+    //while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
+        //delay(1);  //TODO add better delay function with millisecond precision
+    //}          
     digitalWrite(3, HIGH); //undo interrupt signal
 
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
