@@ -64,6 +64,7 @@ Distributed as-is; no warranty is given.
 #include <string.h>
 #include <errno.h>
 #include <wiringPiSPI.h>
+#include <wiringPi.h>
 #include <unistd.h>
 #include <time.h>
 
@@ -107,8 +108,9 @@ int main()
 
     int len = sizeof(buffer)/sizeof(buffer[0]);
 
-    // Initialize WiringPi
+    // Initialize WiringPi 
     wiringPiSetup();
+
     pinMode(8, OUTPUT); //set CE pin to output //WHICH PIN IS CE?
     pinMode(9, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
 
@@ -197,7 +199,7 @@ void receiveByteNRF(unsigned char data){
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
     delay(2); 
 
-    digitalWrite(8, HIGH); //enable chip to receive data
+    digitalWrite(8, HIGH); //enable chip to receive data by setting CE HIGH
     delay(1);
     delay(1);
     while(digitalRead(9)){ //wait for data to be received (IRQ pin is active low)
