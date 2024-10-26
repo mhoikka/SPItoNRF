@@ -118,6 +118,7 @@ int main()
 
     pinMode(2, OUTPUT); //set CE pin to output
     pinMode(3, INPUT); //set IRQ pin to input
+    pullUpDnControl(3, PUD_UP); //enable pull-up resistor on IRQ pin
 
     delay(200); //give the chip time to power on
 
@@ -139,7 +140,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     // Copy elements from array1 to array2 starting at index 1
     memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
 
-	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, len+1);
+    result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
     memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
 	//result is unused at present
 }
@@ -150,11 +151,11 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
  */
 void commandNRF_SPI(unsigned char command){
     unsigned char new_buffer[1];
-	int result;
-	
-	new_buffer[0] = command; 
+    int result;
+    
+    new_buffer[0] = command; 
 
-	result = wiringPiSPIxDataRW(0, CHANNEL, new_buffer, 1); //result is unused at present
+    result = wiringPiSPIDataRW(CHANNEL, new_buffer, 1); //result is unused at present
 }
 
 /** 
@@ -187,7 +188,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
     readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
     
-    readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
+    readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 1Mbps, RF output power to -18dBm
     
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
     my_delay(200); 
