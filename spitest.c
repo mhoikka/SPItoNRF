@@ -117,14 +117,9 @@ int main()
     pinMode(2, OUTPUT); //set CE pin to output
     pinMode(3, INPUT); //set IRQ pin to input
 
-    digitalWrite(2, LOW); //test interrupt signal
-
     delay(200); //give the chip time to power on
 
-    pinState = digitalRead(2); //test interrupt signal
-    printf("Pin 2 state: ");
-    printf("%d\n", pinState);
-    //receiveByteNRF();
+    receiveByteNRF();
 }
 
 /**
