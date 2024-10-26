@@ -86,10 +86,10 @@ unsigned char READ_PAYLOAD_NRF = 0x60;
 unsigned char FLUSH_TX_NRF = 0xE1;
 
 //WiringPi constants
-unsigned char HIGH = 1;
-unsigned char LOW = 0;
-unsigned char OUTPUT = 1;
-unsigned char INPUT = 0;
+//unsigned char HIGH = 1;
+//unsigned char LOW = 0;
+//unsigned char OUTPUT = 1;
+//unsigned char INPUT = 0;
 
 int main()
 {
