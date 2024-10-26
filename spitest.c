@@ -117,7 +117,7 @@ int main()
     delay(200); //give the chip time to power on
     receiveByteNRF(buffer);
 
-    printf("Data: \n");
+    printf("Data: ");
     printf("%d\n", buffer[0]);
 }
 
@@ -180,7 +180,7 @@ void commandNRF_SPI(unsigned char command){
 * @param: data byte of data to be transmitted
 */
  //TODO make this much more functional
-void receiveByteNRF(unsigned char data){
+void receiveByteNRF(){
     unsigned char buffer[1] = {0}; 
     unsigned char dummy = 0x00; // Variable to hold the address width
     unsigned char addressWidth = 0x01; // Variable to hold the address width
@@ -197,16 +197,16 @@ void receiveByteNRF(unsigned char data){
     
     //readwriteNRF_SPI(0x00, &data, 1, WRITE_PAYLOAD_NRF); //write data to be transmitted into TX FIFO
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
-    delay(3); 
+    delay(100); 
 
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
     delay(1);
     delay(1);
-    //while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        //delay(1);  //TODO add better delay function with millisecond precision
-    //}          
-    //digitalWrite(3, HIGH); //undo interrupt signal
-    delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
+    while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
+        delay(1);  //TODO add better delay function with millisecond precision
+    }          
+    digitalWrite(3, HIGH); //undo interrupt signal
+    //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
     digitalWrite(2, LOW); //switch chip to standby mode by disabling CE pin
