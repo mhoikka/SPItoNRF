@@ -92,48 +92,6 @@ unsigned char FLUSH_RX_NRF = 0xE2;
 //unsigned char LOW = 0;
 //unsigned char OUTPUT = 1;
 //unsigned char INPUT = 0;
-void receiveByteNRF() {
-    unsigned char buffer[1] = {0}; 
-    unsigned char dummy = 0x00; 
-    unsigned char addressWidth = 0x01; // Variable to hold the address width
-    unsigned char payload_size = 0x01; // Variable to hold the payload size
-    unsigned char rfSetup = 0x00; // Variable to hold the RF setup value
-    unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
-    unsigned char configPowerDown = 0x09; // Variable to hold the power down config
-    unsigned char rxAddress[] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
-    unsigned char clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
-    unsigned char clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
-    unsigned char clear = 0x01;
-    unsigned char dummydata = 0xFF;
-
-    commandNRF_SPI(FLUSH_RX_NRF); //send command to flush TX FIFO
-    commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
-    //set control registers
-    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); 
-    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
-
-    readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
-    readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
-    readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
-    
-    readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
-    
-    readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
-    my_delay(200); 
-
-    digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
-    my_delay(1);
-    my_delay(1);
-    while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        my_delay(1);  //TODO add better delay function
-    }          
-
-    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
-    digitalWrite(2, LOW); //switch chip to standby mode by setting CE pin low
-
-    printf("Data received: %d\n", buffer[0]);
-    readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
-}
 
 int main()
 {
