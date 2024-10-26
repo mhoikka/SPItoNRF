@@ -112,10 +112,10 @@ int main()
     int len = sizeof(buffer)/sizeof(buffer[0]);
 
     // Initialize WiringPi 
-    wiringPiSetup();
+    wiringPiSetupGpio();
 
-    pinMode(2, OUTPUT); //set CE pin to output //WHICH PIN IS CE?
-    pinMode(3, INPUT); //set IRQ pin to output //WHICH PIN IS IRQ?
+    pinMode(2, OUTPUT); //set CE pin to output
+    pinMode(3, INPUT); //set IRQ pin to input
 
     delay(200); //give the chip time to power on
     receiveByteNRF();
@@ -189,7 +189,7 @@ void receiveByteNRF(){
     unsigned char rfSetup = 0x00; // Variable to hold the RF setup value
     unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
     unsigned char configPowerDown = 0x09; // Variable to hold the power down config
-    unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
+    unsigned char rxAddress[] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
     unsigned char clearIRQ = 0x40; // Variable to hold the clear RX IRQ value for the status register
     
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
