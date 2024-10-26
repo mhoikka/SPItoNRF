@@ -47,7 +47,7 @@ int main()
 
     pinMode(2, OUTPUT); //set CE pin to output
     pinMode(3, INPUT); //set IRQ pin to input
-    digitalWrite(2, LOW); 
+    //digitalWrite(2, LOW); 
     //pullUpDnControl(3, PUD_UP); //enable pull-up resistor on IRQ pin
 
     delay(200); //give the chip time to power on
