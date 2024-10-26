@@ -153,6 +153,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
  //TODO make this much more functional
 void receiveByteNRF(unsigned char data){
     unsigned char buffer[1] = {0}; 
+    unsigned char dummy = 0x00; // Variable to hold the address width
     unsigned char addressWidth = 0x01; // Variable to hold the address width
     unsigned char rfSetup = 0x20; // Variable to hold the RF setup value
     unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
@@ -160,7 +161,9 @@ void receiveByteNRF(unsigned char data){
     unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
 
     //set control registers
+    readwriteNRF_SPI(SETUP_AW, &dummy, 1, READ_REG_NRF); //read address width register
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
+    readwriteNRF_SPI(SETUP_AW, &dummy, 1, READ_REG_NRF); //read address width register
     readwriteNRF_SPI(RX_ADDR_P01, &rxAddress, 3, WRITE_REG_NRF); //set read address
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 250kbps, RF output power to -18dBm
     //write data to be transmitted into TX FIFO
