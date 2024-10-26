@@ -85,6 +85,7 @@ unsigned char TX_ADDR = 0x10;
 unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
 unsigned char READ_PAYLOAD_NRF = 0x60;
 unsigned char FLUSH_TX_NRF = 0xE1;
+unsigned char FLUSH_RX_NRF = 0xE2;
 
 //WiringPi constants
 //unsigned char HIGH = 1;
@@ -193,11 +194,12 @@ void receiveByteNRF(){
     unsigned char rxAddress[] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
     unsigned char clear_irqs = 0x40; // Variable to hold the clear RX IRQ value for the status register
     unsigned char clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
-    
+    unsigned char clear = 0x01;
+
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
-    readwriteNRF_SPI(STATUS, &clear_irqs, 1, WRITE_REG_NRF); //Clear RX IRQ
-    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //Clear RX IRQ
+    readwriteNRF_SPI(STATUS, &clear, 1, WRITE_REG_NRF); //Clear RX IRQ
+    //readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //Clear RX IRQ
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
     readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
