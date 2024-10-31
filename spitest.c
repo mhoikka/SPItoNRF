@@ -116,6 +116,7 @@ void receiveByteNRF(){
     unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
     unsigned char pipe0 = 0x01; // Variable to hold the pipe 0 value
     unsigned char clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
+    unsigned char clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
     unsigned char clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
     unsigned char clear = 0x01;
     unsigned char dummydata = 0xFF;
@@ -125,6 +126,7 @@ void receiveByteNRF(){
     //set control registers
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
+    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
 
 
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
@@ -162,6 +164,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
+    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
 }
 
 /**
