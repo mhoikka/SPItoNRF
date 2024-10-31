@@ -25,6 +25,7 @@ unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
 unsigned char READ_PAYLOAD_NRF = 0x60;
 unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
+unsigned char FIFO_STATUS = 0x17;
 
 int main()
 {
@@ -131,6 +132,7 @@ void receiveByteNRF(){
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
     my_delay(1);
     my_delay(1);
+
     readwriteNRF_SPI(FIFO_STATUS, 0x00, 1, READ_REG_NRF); //read FIFO status register
 
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
