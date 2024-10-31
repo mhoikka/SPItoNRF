@@ -142,7 +142,7 @@ void receiveByteNRF(){
     my_delay(1);
     my_delay(1);
 
-    readwriteNRF_SPI(FIFO_STATUS, 0x00, 1, READ_REG_NRF); //read FIFO status register
+    readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF); //read FIFO status register
 
     // why is this causing a seg fault?
     readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
