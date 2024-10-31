@@ -96,7 +96,7 @@ void commandNRF_SPI(unsigned char command){
 */
  //TODO make this much more functional
 void receiveByteNRF(){
-    unsigned char buffer[1] = {0}; 
+    unsigned char buffer[1] = {0xFF}; 
     unsigned char dummy = 0x00; 
     unsigned char addressWidth = 0x01; // Variable to hold the address width
     unsigned char payload_size = 0x01; // Variable to hold the payload size
@@ -110,7 +110,7 @@ void receiveByteNRF(){
     unsigned char clear = 0x01;
     unsigned char dummydata = 0xFF;
 
-    commandNRF_SPI(FLUSH_RX_NRF); //send command to flush TX FIFO
+    commandNRF_SPI(FLUSH_RX_NRF); //send command to flush RX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
@@ -131,6 +131,11 @@ void receiveByteNRF(){
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
     my_delay(1);
     my_delay(1);
+    readwriteNRF_SPI(FIFO_STATUS, 0x00, 1, READ_REG_NRF); //read FIFO status register
+
+    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
+    printf("Past data received: %d\n", buffer[0]);
+
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
         my_delay(1);  //TODO add better delay function
     }          
