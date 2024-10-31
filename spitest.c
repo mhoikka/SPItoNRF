@@ -46,8 +46,8 @@ int main()
     wiringPiSetup();
 
     pinMode(2, OUTPUT); //set CE pin to output
-    pinMode(3, OUTPUT); //set IRQ pin to input
-    pullUpDnControl(3, PUD_UP); //enable pull-up resistor on IRQ pin
+    pinMode(3, INPUT); //set IRQ pin to input
+    //pullUpDnControl(3, PUD_UP); //enable pull-up resistor on IRQ pin
     pullUpDnControl(2, PUD_DOWN); //enable pull-down resistor on CE pin
 
 
