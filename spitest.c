@@ -14,6 +14,7 @@ unsigned char WRITE_REG_NRF = 0x20; //write command for NRF24L01+
 unsigned char READ_REG_NRF = 0x00; //read command for NRF24L01+
 
 unsigned char ENAA = 0x01;
+unsigned char EN_RXADDR = 0x02;
 unsigned char STATUS = 0x07;
 unsigned char SETUP_AW = 0x03;
 unsigned char RF_SETUP = 0x06;
@@ -103,6 +104,7 @@ void receiveByteNRF(){
     unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
     unsigned char configPowerDown = 0x09; // Variable to hold the power down config
     unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
+    unsigned char pipe0 = 0x01; // Variable to hold the pipe 0 value
     unsigned char clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
     unsigned char clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
     unsigned char clear = 0x01;
@@ -117,6 +119,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
+    readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF); //set RX address to enable pipe 0
     //readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
     
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 1Mbps, RF output power to -18dBm
