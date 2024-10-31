@@ -97,7 +97,12 @@ void commandNRF_SPI(unsigned char command){
 */
  //TODO make this much more functional
 void receiveByteNRF(){
-    unsigned char buffer[1] = {0xFF}; 
+    unsigned char buffer[32] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,      
+                                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+                                0xFF, 0xFF}; 
     unsigned char dummy = 0x00; 
     unsigned char addressWidth = 0x01; // Variable to hold the address width
     unsigned char payload_size = 0x01; // Variable to hold the payload size
