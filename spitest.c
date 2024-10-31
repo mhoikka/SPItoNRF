@@ -74,6 +74,10 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
 
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
+    if (result == -1) {
+        printf(stderr, "SPI communication failed\n");
+        return; // Handle SPI error
+    }
     memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
 	//result is unused at present
 }
@@ -140,7 +144,8 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(FIFO_STATUS, 0x00, 1, READ_REG_NRF); //read FIFO status register
 
-    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
+    // why is this causing a seg fault?
+    readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
     printf("Past data received: %d\n", buffer[0]);
 
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
