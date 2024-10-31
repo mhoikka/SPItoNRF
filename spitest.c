@@ -135,7 +135,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 1Mbps, RF output power to -18dBm
     
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
-    my_delay(200); 
+    my_delay(2); 
 
 
     digitalWrite(2, HIGH); //enable chip to receive data by setting CE HIGH
