@@ -132,7 +132,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
-    readwriteNRF_SPI(ENAA, &no_ack, 1, WRITE_REG_NRF); //disable auto-ack
+    //readwriteNRF_SPI(ENAA, &no_ack, 1, WRITE_REG_NRF); //disable auto-ack
     readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF); //set RX address to enable pipe 0
     //readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
     
