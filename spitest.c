@@ -108,6 +108,7 @@ void receiveByteNRF(){
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF}; 
     unsigned char dummy = 0x00; 
+    unsigned char no_ack = 0x00;
     unsigned char addressWidth = 0x01; // Variable to hold the address width
     unsigned char payload_size = 0x01; // Variable to hold the payload size
     unsigned char rfSetup = 0x00; // Variable to hold the RF setup value
@@ -131,6 +132,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
+    readwriteNRF_SPI(ENAA, &no_ack, 1, WRITE_REG_NRF); //disable auto-ack
     readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF); //set RX address to enable pipe 0
     //readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
     
