@@ -23,7 +23,7 @@ unsigned char RX_PW_P0 = 0x11;
 unsigned char TX_ADDR = 0x10;
 unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
 unsigned char READ_PAYLOAD_NRF = 0x61;
-unsigned char READ_TOP_PAYLOAD_NRF = 0x60;
+unsigned char READ_RXWID_NRF = 0x60;
 unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
 unsigned char FIFO_STATUS = 0x17;
@@ -159,6 +159,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF); //read FIFO status register
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
 
+    readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF);
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
     printf("Past data received: %d\n", buffer[0]);
 
