@@ -83,7 +83,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
         return; // Handle SPI error
     }
     //memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
-    copy_Buffer(new_buffer[1], buffer, len, 0, void);
+    copy_Buffer(new_buffer[1], buffer, len, 0, &command);
 	//result is unused at present
 }
 
