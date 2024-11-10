@@ -175,7 +175,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
-    printf("Data received %d: %d\n", i, buffer[0]);
+    printf("Data received : %d\n", buffer[0]);
     printBuffer(buffer, 32); //see what;s in that buffer
 
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
