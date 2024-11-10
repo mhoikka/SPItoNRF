@@ -161,9 +161,9 @@ void receiveByteNRF(){
     readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF); //read FIFO status register
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
 
-    readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); //maybe useless until interupts are removed
-    readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
-    printf("Past data received: %d\n", buffer[0]);
+    //readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); //maybe useless until interupts are removed
+    //readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+    //printf("Past data received: %d\n", buffer[0]);
 
     //delay(6000); //temporary delay to allow for data to be received by cyclic transmission
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
