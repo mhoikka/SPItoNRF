@@ -120,7 +120,7 @@ void receiveByteNRF(){
     unsigned char dummy = 0x00; 
     unsigned char no_ack = 0x00;
     unsigned char addressWidth = 0x01; // Variable to hold the address width
-    unsigned char payload_size = 0x01; // Variable to hold the payload size
+    unsigned char payload_size = 0x00; // Variable to hold the payload size
     unsigned char rfSetup = 0x00; // Variable to hold the RF setup value
     unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
     unsigned char configPowerDown = 0x09; // Variable to hold the power down config
