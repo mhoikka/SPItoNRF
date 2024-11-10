@@ -22,7 +22,8 @@ unsigned char RX_ADDR_P0 = 0x0A;
 unsigned char RX_PW_P0 = 0x11;
 unsigned char TX_ADDR = 0x10;
 unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
-unsigned char READ_PAYLOAD_NRF = 0x60;
+unsigned char READ_PAYLOAD_NRF = 0x61;
+unsigned char READ_TOP_PAYLOAD_NRF = 0x60;
 unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
 unsigned char FIFO_STATUS = 0x17;
@@ -75,9 +76,11 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     //command_copy_Buffer(buffer, new_buffer, len, command);
     copy_Buffer(buffer, new_buffer, len, 1, &command);
 
-    printf("%d ", new_buffer[1]);
+    //printf("%d ", new_buffer[1]);
+    printBuffer(new_buffer, len+1);
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
-    printf("%d\n", new_buffer[1]);
+    //printf("%d\n", new_buffer[1]);
+    printBuffer(new_buffer, len+1);
     if (result == -1) {
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
@@ -202,6 +205,7 @@ void printBuffer(unsigned char * buffer, int len){
     for(int i = 0; i < len; i++){
         printf("%d ", buffer[i]);
     }
+    printf("\n");
 }
 
 /**
