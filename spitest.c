@@ -184,8 +184,8 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
     
-    readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); 
-    readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+    //readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); 
+    //readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
 
 }
 
