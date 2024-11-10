@@ -67,6 +67,7 @@ int main()
  */
 void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){
     unsigned char new_buffer[len+1];
+    unsigned char command_arr[1] = {command | reg_addr};
 	int result;
 	
 	new_buffer[0] = command | reg_addr; 
@@ -74,7 +75,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     // Copy elements from array1 to array2 starting at index 1
     //memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
     //command_copy_Buffer(buffer, new_buffer, len, command);
-    copy_Buffer(buffer, new_buffer, len, 1, &command);
+    copy_Buffer(buffer, new_buffer, len, 1, command_arr);
 
     //printf("%d ", new_buffer[1]);
     printBuffer(new_buffer, len+1);
