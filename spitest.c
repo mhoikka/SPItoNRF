@@ -120,7 +120,7 @@ void receiveByteNRF(){
     unsigned char dummy = 0x00; 
     unsigned char no_ack = 0x00;
     unsigned char addressWidth = 0x01; // Variable to hold the address width
-    unsigned char payload_size = 0x01; // Variable to hold the payload size
+    unsigned char payload_size = 0x20; // Variable to hold the payload size
     unsigned char rfSetup = 0x00; // Variable to hold the RF setup value
     unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
     unsigned char configPowerDown = 0x09; // Variable to hold the power down config
@@ -144,7 +144,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
     //readwriteNRF_SPI(ENAA, &no_ack, 1, WRITE_REG_NRF); //disable auto-ack
     readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF); //set RX address to enable pipe 0
-    readwriteNRF_SPI(RX_PW_P0, &payload_size, 32, WRITE_REG_NRF); //set payload size
+    readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size
     
     readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 1Mbps, RF output power to -18dBm
     
