@@ -110,13 +110,13 @@ void commandNRF_SPI(unsigned char command){
 */
  //TODO make this much more functional
 void receiveByteNRF(){
-    /*unsigned char buffer[32] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    unsigned char buffer[32] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,      
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                0xFF, 0xFF}; */
-    unsigned char buffer[1] = {0xFF};
+                                0xFF, 0xFF}; 
+    //unsigned char buffer[1] = {0xFF};
     unsigned char dummy = 0x00; 
     unsigned char no_ack = 0x00;
     unsigned char addressWidth = 0x01; // Variable to hold the address width
@@ -160,7 +160,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
 
     readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); //maybe useless until interupts are removed
-    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
+    readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
     printf("Past data received: %d\n", buffer[0]);
 
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
@@ -180,7 +180,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
     
     readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); 
-    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
+    readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
 }
 
 /**
