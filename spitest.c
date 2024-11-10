@@ -78,7 +78,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     copy_Buffer(buffer, new_buffer, len, 1, command_arr);
 
     //printf("%d ", new_buffer[1]);
-    printBuffer(new_buffer, len+1);
+    //printBuffer(new_buffer, len+1);
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
     //printf("%d\n", new_buffer[1]);
     printBuffer(new_buffer, len+1);
@@ -86,6 +86,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
+    copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
     //memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
     //copy_Buffer(new_buffer[1], buffer, len, 0, &command);
 	//result is unused at present
@@ -173,6 +174,8 @@ void receiveByteNRF(){
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
     printf("Data received: %d\n", buffer[0]);
+    printBuffer(buffer, 32);
+    
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
 
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
