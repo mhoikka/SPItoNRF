@@ -73,14 +73,9 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     // Copy elements from array1 to array2 starting at index 1
     memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
 
-    my_delay(1);
-    printBuffer(new_buffer, len+1);
-    my_delay(1);
+    printf("%d", new_buffer[1]);
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
-    my_delay(1);
-    printBuffer(new_buffer, len+1);
-    my_delay(1);
-
+    printf("%d", new_buffer[1]);
     if (result == -1) {
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
@@ -108,12 +103,13 @@ void commandNRF_SPI(unsigned char command){
 */
  //TODO make this much more functional
 void receiveByteNRF(){
-    unsigned char buffer[32] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    /*unsigned char buffer[32] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,      
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                                0xFF, 0xFF}; 
+                                0xFF, 0xFF}; */
+    unsigned char buffer[1] = {0xFF};
     unsigned char dummy = 0x00; 
     unsigned char no_ack = 0x00;
     unsigned char addressWidth = 0x01; // Variable to hold the address width
@@ -165,7 +161,7 @@ void receiveByteNRF(){
     //digitalWrite(3, HIGH); //undo interrupt signal
     //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
-    readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
     printf("Data received: %d\n", buffer[0]);
