@@ -73,9 +73,13 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     // Copy elements from array1 to array2 starting at index 1
     memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
 
+    my_delay(1);
     printBuffer(new_buffer, len+1);
+    my_delay(1);
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
+    my_delay(1);
     printBuffer(new_buffer, len+1);
+    my_delay(1);
 
     if (result == -1) {
         printf(stderr, "SPI communication failed\n");
@@ -197,7 +201,7 @@ void my_delay(int milliseconds)
 void printBuffer(unsigned char * buffer, int len){
     printf("\n");
     for(int i = 0; i < len; i++){
-        printf("%d", buffer[i]);
+        printf("%d ", buffer[i]);
     }
 }
 
