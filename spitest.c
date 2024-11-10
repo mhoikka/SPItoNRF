@@ -159,7 +159,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF); //read FIFO status register
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
 
-    readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF);
+    readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); //maybe useless until interupts are removed
     readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
     printf("Past data received: %d\n", buffer[0]);
 
@@ -178,6 +178,9 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
+    
+    readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); 
+    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
 }
 
 /**
