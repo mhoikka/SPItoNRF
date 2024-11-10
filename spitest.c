@@ -173,7 +173,7 @@ void receiveByteNRF(){
     //digitalWrite(3, HIGH); //undo interrupt signal
     //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
-    readwriteNRF_SPI(0x00, buffer, 2, READ_PAYLOAD_NRF); //read data from RX FIFO
+    readwriteNRF_SPI(0x00, buffer, 1, READ_PAYLOAD_NRF); //read data from RX FIFO
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
     printf("Data received : %d\n", buffer[0]);
