@@ -75,9 +75,9 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
     //command_copy_Buffer(buffer, new_buffer, len, command);
     copy_Buffer(buffer, new_buffer, len, 1, &command);
 
-    printf("%d", new_buffer[1]);
+    printf("%d ", new_buffer[1]);
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
-    printf("%d", new_buffer[1]);
+    printf("%d\n", new_buffer[1]);
     if (result == -1) {
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
