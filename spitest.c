@@ -71,7 +71,9 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
 	new_buffer[0] = command | reg_addr; 
 
     // Copy elements from array1 to array2 starting at index 1
-    memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
+    //memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
+    //command_copy_Buffer(buffer, new_buffer, len, command);
+    copy_Buffer(buffer, new_buffer, len, 1, &command);
 
     printf("%d", new_buffer[1]);
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
@@ -80,7 +82,8 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
-    memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
+    //memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
+    copy_Buffer(new_buffer[1], buffer, len, 0, void);
 	//result is unused at present
 }
 
@@ -189,7 +192,7 @@ void my_delay(int milliseconds)
 }
 
 /**
- * @brief  print array function 
+ * @brief  print array 
  * @param  buffer: pointer to buffer that will be printed
  * @param  len: length of buffer
  * @retval None
@@ -199,6 +202,24 @@ void printBuffer(unsigned char * buffer, int len){
     for(int i = 0; i < len; i++){
         printf("%d ", buffer[i]);
     }
+}
+
+/**
+ * @brief  copy array with offset
+ * @param  buffer: pointer to buffer that will be printed
+ * @param  new_buffer: pointer to buffer that will be printed
+ * @param  len: length of buffer
+ * @param  offset: offset to start copying from
+ * @retval None
+ */
+void copy_Buffer(unsigned char * buffer, unsigned char * new_buffer, int len, int offset, unsigned char * command){
+    for(int i = 0; i < offset; i++){
+        new_buffer[i] = command[i];
+    }
+    for(int i = 0; i < len; i++){
+        new_buffer[i+offset] = buffer[i];
+    }
+    
 }
 
 
