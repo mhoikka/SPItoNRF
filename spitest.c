@@ -176,7 +176,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
     //printf("Data received : %d\n", buffer[0]);
     printBuffer(buffer, 32); //see what's in that buffer
-    my_delay(1);
+    my_delay(2);
     readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
     //printf("Data received : %d\n", buffer[0]);
     printBuffer(buffer, 32); //see what's in that buffer
