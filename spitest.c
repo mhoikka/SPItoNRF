@@ -123,7 +123,7 @@ void receiveByteNRF(){
     unsigned char no_ack = 0x00;
     unsigned char ack_p0 = 0x01;
     unsigned char addressWidth = 0x01; // Variable to hold the address width
-    unsigned char payload_size = 0x20; // Variable to hold the payload size
+    unsigned char payload_size = 0x04; // Variable to hold the payload size
     unsigned char rfSetup = 0x00; // Variable to hold the RF setup value
     unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
     unsigned char configPowerDown = 0x09; // Variable to hold the power down config
@@ -173,7 +173,7 @@ void receiveByteNRF(){
     //digitalWrite(3, HIGH); //undo interrupt signal
     //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
-    readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+    readwriteNRF_SPI(0x00, buffer, 4, READ_PAYLOAD_NRF); //read data from RX FIFO
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
     printf("Data received : %d\n", buffer[0]);
