@@ -182,6 +182,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
 
     //my_delay(2000);
+    my_delay(10);
     //while(!(STATUS & (1 << 6))); //wait for data to be received, UNCOMMENT THIS SOON
     while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
         my_delay(1);  //TODO add better delay function
