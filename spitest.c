@@ -183,6 +183,9 @@ void receiveByteNRF(){
     //printf("Data received : %d\n", buffer[0]);
     printBuffer(buffer, 32); //see what's in that buffer
 
+    clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
+    clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
+    clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
