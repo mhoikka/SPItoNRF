@@ -145,7 +145,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
-    readwriteNRF_SPI(ENAA, &no_ack, 1, WRITE_REG_NRF); //enable auto-ack for pipe 0
+    readwriteNRF_SPI(ENAA, &ack_p0, 1, WRITE_REG_NRF); //enable auto-ack for pipe 0
     readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF); //set RX address to enable pipe 0
     readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size //WRITING THIS INSTANTLY STOPS TRANSMISSIONS FROM WORKING AGAIN, IDK WHY
     
@@ -181,7 +181,8 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
 
-    my_delay(2000);
+    //my_delay(2000);
+    while(!(STATUS & (1 << 6))); //wait for data to be received
     readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
     //printf("Data received : %d\n", buffer[0]);
     printBuffer(buffer, 32); //see what's in that buffer
