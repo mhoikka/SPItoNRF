@@ -40,9 +40,6 @@ int main()
     // 500000 indicates bus speed.
     fd = wiringPiSPISetup(CHANNEL, 500000); 
 
-    printf("Init result: ");
-    printf("%d\n", fd);
-
     int len = sizeof(buffer)/sizeof(buffer[0]);
 
     // Initialize WiringPi 
@@ -72,24 +69,15 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
 	
 	new_buffer[0] = command | reg_addr; 
 
-    // Copy elements from array1 to array2 starting at index 1
-    //memcpy(&new_buffer[1], buffer, len * sizeof(unsigned char));
-    //command_copy_Buffer(buffer, new_buffer, len, command);
     copy_Buffer(buffer, new_buffer, len, 1, command_arr);
 
-    //printf("%d ", new_buffer[1]);
-    //printBuffer(new_buffer, len+1);
     result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
-    //printf("%d\n", new_buffer[1]);
-    //printBuffer(new_buffer, len+1);
+
     if (result == -1) {
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
     copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
-    //memcpy(buffer, &new_buffer[1], len * sizeof(unsigned char));
-    //copy_Buffer(new_buffer[1], buffer, len, 0, &command);
-	//result is unused at present
 }
 
 /**
@@ -154,7 +142,6 @@ void receiveByteNRF(){
     readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
     my_delay(2); 
 
-
     digitalWrite(15, HIGH); //enable chip to receive data by setting CE HIGH
     my_delay(1);
     my_delay(1);
@@ -162,25 +149,14 @@ void receiveByteNRF(){
     readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF); //read FIFO status register
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
 
-    //readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); //maybe useless until interupts are removed
-    //readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
-    //printf("Past data received: %d\n", buffer[0]);
-
-    //delay(6000); //temporary delay to allow for data to be received by cyclic transmission
-    /** while(digitalRead(3)){ //wait for data to be received (IRQ pin is active low)
-        my_delay(1);  //TODO add better delay function
-    }  */
    while(1){
         readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
         while(!(dummy & (1 << 6))){
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
         };        //wait for data to be received 
-        //digitalWrite(3, HIGH); //undo interrupt signal
-        //delay(1000 * 2); //temporary delay to allow for data to be received by manual trigger
 
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
-        //printf("Data received : %d\n", buffer[0]);
-        //printBuffer(buffer, 32); //see what's in that buffer
+
         printTempData(buffer, 32); //see what the temp data is
 
         clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
@@ -245,9 +221,9 @@ void printTempData(unsigned char * buffer, int len){
     printf("Ambient Temperature: %d C\n", temp);
     unsigned int pressure = buffer[4] | buffer[5] << 8 | buffer[6] << 16 | buffer[7] << 24;
     double pressure_kPa = pressure / 1000.0;
-    printf("Ambient Pressure: %lf kPa\n", pressure_kPa);
+    printf("Ambient Pressure:    %.3lf kPa\n", pressure_kPa);
     unsigned int humidity = buffer[8]  | buffer[9] << 8 | buffer[10] << 16 | buffer[11] << 24;
-    printf("Ambient Humidity: %d %%\n", humidity);
+    printf("Ambient Humidity:    %d%%\n", humidity);
     printf("\n");
 }
 
