@@ -181,6 +181,7 @@ void receiveByteNRF(){
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
         //printf("Data received : %d\n", buffer[0]);
         printBuffer(buffer, 32); //see what's in that buffer
+        printTempData(buffer, 32); //see what the temp data is
 
         clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
         clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
@@ -200,10 +201,6 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
-    
-    //readwriteNRF_SPI(0x00, buffer, 1, READ_RXWID_NRF); 
-    //readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
-
 }
 
 /**
@@ -233,6 +230,23 @@ void printBuffer(unsigned char * buffer, int len){
     for(int i = 0; i < len; i++){
         printf("%d ", buffer[i]);
     }
+    printf("\n");
+}
+
+/**
+ * @brief  print temp data
+ * @param  buffer: pointer to buffer that will be printed
+ * @param  len: length of buffer
+ * @retval None
+ */
+void printTempData(unsigned char * buffer, int len){
+    printf("\n");
+    int temp = buffer[0] | buffer[1] << 8 | buffer[2] << 16 | buffer[3] << 24;
+    printf("Ambient Temperature: %d\n", temp);
+    unsigned int pressure = buffer[4] | buffer[5] << 8 | buffer[6] << 16 | buffer[7] << 24;
+    printf("Ambient Pressure: %d\n", pressure);
+    unsigned int humidity = buffer[8]  | buffer[9] << 8 | buffer[10] << 16 | buffer[11] << 24;
+    printf("Ambient Humidity: %d\n", humidity);
     printf("\n");
 }
 
