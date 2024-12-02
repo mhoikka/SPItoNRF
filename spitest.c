@@ -242,11 +242,12 @@ void printBuffer(unsigned char * buffer, int len){
 void printTempData(unsigned char * buffer, int len){
     printf("\n");
     int temp = buffer[0] | buffer[1] << 8 | buffer[2] << 16 | buffer[3] << 24;
-    printf("Ambient Temperature: %d\n", temp);
+    printf("Ambient Temperature: %d C\n", temp);
     unsigned int pressure = buffer[4] | buffer[5] << 8 | buffer[6] << 16 | buffer[7] << 24;
-    printf("Ambient Pressure: %d\n", pressure);
+    double pressure_kPa = pressure / 1000.0;
+    printf("Ambient Pressure: %d kPa\n", pressure_kPa);
     unsigned int humidity = buffer[8]  | buffer[9] << 8 | buffer[10] << 16 | buffer[11] << 24;
-    printf("Ambient Humidity: %d\n", humidity);
+    printf("Ambient Humidity: %d %%\n", humidity);
     printf("\n");
 }
 
