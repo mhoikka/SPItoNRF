@@ -13,6 +13,7 @@ unsigned char CONFIG_REG = 0x00;
 unsigned char WRITE_REG_NRF = 0x20; //write command for NRF24L01+
 unsigned char READ_REG_NRF = 0x00; //read command for NRF24L01+
 
+//Register addresses for NRF24L01+
 unsigned char ENAA = 0x01;
 unsigned char EN_RXADDR = 0x02;
 unsigned char STATUS = 0x07;
@@ -21,17 +22,18 @@ unsigned char RF_SETUP = 0x06;
 unsigned char RX_ADDR_P0 = 0x0A;
 unsigned char RX_PW_P0 = 0x11;
 unsigned char TX_ADDR = 0x10;
+unsigned char FIFO_STATUS = 0x17;
+
+//Command addresses for NRF24L01+
 unsigned char WRITE_PAYLOAD_NRF = 0xA0; //write TX FIFO command for NRF24L01+
 unsigned char READ_PAYLOAD_NRF = 0x61;
 unsigned char READ_RXWID_NRF = 0x60;
 unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
-unsigned char FIFO_STATUS = 0x17;
 
 
-const unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
+const unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address for NRF24L01+
 
-const unsigned char NO_ACK = 0x00;
 const unsigned char ACK_PO1 = 0x01;
 const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
 const unsigned char PAYLOAD_SIZE = 0x20; // Variable to hold the payload size
@@ -126,14 +128,13 @@ void receiveByteNRF(){
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF}; 
     unsigned char dummy = 0x00; 
-    printf("1.00\n");
     commandNRF_SPI(FLUSH_RX_NRF); //send command to flush RX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
+
     //set control registers
     readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &CLEAR_IRQRX, 1, WRITE_REG_NRF, 0); 
     readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
-    printf("1.01\n");
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF, 0); //set read address
@@ -154,7 +155,6 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
 
    while(1){
-        printf("Got inside loop");
         readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         while(!(dummy & (1 << 6))){                         //wait for data to be received 
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
@@ -164,7 +164,8 @@ void receiveByteNRF(){
 
         printTempData(buffer, 32); //see what the temp data is
 
-        readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); //reset interrupt bits
+        //reset interrupt bits
+        readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); 
         readwriteNRF_SPI(STATUS, &CLEAR_IRQRX, 1, WRITE_REG_NRF, 0); 
         readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
     }
