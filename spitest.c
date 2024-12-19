@@ -77,6 +77,7 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
+    copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
 }
 
 /**
