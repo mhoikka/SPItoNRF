@@ -155,8 +155,8 @@ void receiveByteNRF(){
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
         };        //wait for data to be received 
 
-        unsigned char *temp_buffer = readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
-        memcpy(buffer, temp_buffer, 32); // copy data to original buffer
+        readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+        //memcpy(buffer, temp_buffer, 32); // copy data to original buffer
 
         printTempData(temp_buffer, 32); //see what the temp data is
 
