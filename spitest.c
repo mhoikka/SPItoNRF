@@ -62,7 +62,7 @@ int main()
  * @param buffer: Pointer to data buffer that stores the data read
  * @param len: Number of bytes of data to be read
  */
-void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){//TODO fix buffer argument to not be a pointer
+void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command, unsigned char readMode){//TODO fix buffer argument to not be a pointer
     unsigned char new_buffer[len+1];
     unsigned char command_arr[1] = {command | reg_addr};
 	int result;
@@ -77,29 +77,8 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
-    copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
-}
-
-/**
- * @brief reads from the SPI bus
- * @param reg_addr: Address of the register where data is going to be read from
- * @param buffer: Pointer to data buffer that stores the data read
- * @param len: Number of bytes of data to be read
- */
-void writeNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){//TODO fix buffer argument to not be a pointer
-    unsigned char new_buffer[len+1];
-    unsigned char command_arr[1] = {command | reg_addr};
-	int result;
-	
-	new_buffer[0] = command | reg_addr; 
-
-    copy_Buffer(buffer, new_buffer, len, 1, command_arr);
-
-    result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
-
-    if (result == -1) {
-        printf(stderr, "SPI communication failed\n");
-        return; // Handle SPI error
+    if (readMode){
+        copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
     }
 }
 
@@ -147,57 +126,51 @@ void receiveByteNRF(){
     commandNRF_SPI(FLUSH_RX_NRF); //send command to flush RX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
-    writeNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
-    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
-    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
+    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
+    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
+    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
 
 
-    readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF); //set to 3 byte address width
-    readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF); //set read address
-    readwriteNRF_SPI(ENAA, &ack_p0, 1, WRITE_REG_NRF); //enable auto-ack for pipe 0
-    readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF); //set RX address to enable pipe 0
-    readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF); //set payload size 
+    readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
+    readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF, 0); //set read address
+    readwriteNRF_SPI(ENAA, &ack_p0, 1, WRITE_REG_NRF, 0); //enable auto-ack for pipe 0
+    readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF, 0); //set RX address to enable pipe 0
+    readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF, 0); //set payload size 
     
-    readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF); //set RF Data Rate to 1Mbps, RF output power to -18dBm
+    readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 1Mbps, RF output power to -18dBm
     
-    readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF); //set to PRX mode and set power on bit
+    readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF, 0); //set to PRX mode and set power on bit
     my_delay(2); 
 
     digitalWrite(15, HIGH); //enable chip to receive data by setting CE HIGH
     my_delay(1);
     my_delay(1);
 
-    readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF); //read FIFO status register
-    readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
+    readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF, 0); //read FIFO status register
+    readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
 
    while(1){
-        readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
+        readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
         while(!(dummy & (1 << 6))){                         //wait for data to be received 
-            readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
+            readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
         };        
 
-        readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+        readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF, 1); //read data from RX FIFO
 
-        printTempData(buffer, 32); //see what the temp data is
+        printTempData(buffer, 32); 
 
-        clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
-        clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
-        clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
-        readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
-        readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
-        readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
+        readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
+        readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
+        readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
     }
 
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
-    printf("Data received : %d\n", buffer[0]);
-    printBuffer(buffer, 32); //see what's in that buffer
+    readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF, 0); //power down by writing to config register
 
-    readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF); //power down by writing to config register
-
-    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
-    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
-    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
+    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
+    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
+    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
 }
 
 /**
