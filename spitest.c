@@ -158,7 +158,7 @@ void receiveByteNRF(){
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
         //memcpy(buffer, temp_buffer, 32); // copy data to original buffer
 
-        printTempData(temp_buffer, 32); //see what the temp data is
+        printTempData(buffer, 32); //see what the temp data is
 
         clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
         clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
