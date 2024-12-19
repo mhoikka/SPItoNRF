@@ -31,20 +31,19 @@ unsigned char READ_RXWID_NRF = 0x60;
 unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
 
-
+//Data for NRF24L01+
 const unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address for NRF24L01+
-
 const unsigned char ACK_PO1 = 0x01;
 const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
 const unsigned char PAYLOAD_SIZE = 0x20; // Variable to hold the payload size
 const unsigned char RFSETUP = 0x00; // Variable to hold the RF setup value
 const unsigned char CONFIGPRX = 0x0B; // Variable to hold the PRX mode config
 const unsigned char CONFIGPOWERDOWN = 0x09; // Variable to hold the power down config
-
 const unsigned char PIPE0 = 0x01; // Variable to hold the pipe 0 value
 const unsigned char CLEAR_IRQRX = 0x40; // Variable to hold the clear RX IRQ value for the status register
 const unsigned char CLEAR_IRQTX = 0x20; // Variable to hold the clear TX IRQ value for the status register
 const unsigned char CLEAR_RET = 0x10; // Variable to hold the clear retransmit value for the status register
+
 
 int main()
 {
