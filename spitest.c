@@ -61,6 +61,8 @@ int main()
  * @param reg_addr: Address of the register where data is going to be read from
  * @param buffer: Pointer to data buffer that stores the data read
  * @param len: Number of bytes of data to be read
+ * @param command: Command to be sent to the NRF24L01+
+ * @param readMode: Boolean value to determine if the data is being read or written
  */
 void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command, unsigned char readMode){//TODO fix buffer argument to not be a pointer
     unsigned char new_buffer[len+1];
@@ -157,8 +159,11 @@ void receiveByteNRF(){
 
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF, 1); //read data from RX FIFO
 
-        printTempData(buffer, 32); 
+        printTempData(buffer, 32); //see what the temp data is
 
+        clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
+        clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
+        clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
         readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
         readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
         readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
@@ -166,10 +171,13 @@ void receiveByteNRF(){
 
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
+    printf("Data received : %d\n", buffer[0]);
+    printBuffer(buffer, 32); //see what's in that buffer
+
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF, 0); //power down by writing to config register
 
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
-    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
+    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF), 0; 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
 }
 
