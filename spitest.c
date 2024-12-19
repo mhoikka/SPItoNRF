@@ -47,7 +47,7 @@ int main()
 
     pinMode(15, OUTPUT); //set CE pin to output
     pinMode(3, INPUT); //set IRQ pin to input
-    //pullUpDnControl(3, PUD_UP); //enable pull-up resistor on IRQ pin
+
     pullUpDnControl(15, PUD_DOWN); //enable pull-down resistor on CE pin
     digitalWrite(15, LOW); 
 
@@ -62,7 +62,7 @@ int main()
  * @param buffer: Pointer to data buffer that stores the data read
  * @param len: Number of bytes of data to be read
  */
-void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){//TODO fix buffer argument to not be a pointer
+unsigned char * readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){//TODO fix buffer argument to not be a pointer
     unsigned char new_buffer[len+1];
     unsigned char command_arr[1] = {command | reg_addr};
 	int result;
@@ -77,7 +77,9 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
-    copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
+    //copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
+    return &new_buffer[1];
+    //TODO instead of copying new_buffer into buffer, return pointer to new_buffer starting at byte 1. 
 }
 
 /**
@@ -94,8 +96,7 @@ void commandNRF_SPI(unsigned char command){
 }
 
 /** 
-* @brief: transmits a byte of data for testing purposes
-* @param: data byte of data to be transmitted
+* @brief: receives a byte of data for testing purposes
 */
  //TODO make this much more functional
 void receiveByteNRF(){
@@ -106,7 +107,6 @@ void receiveByteNRF(){
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF}; 
-    //unsigned char buffer[1] = {0xFF};
     unsigned char dummy = 0x00; 
     unsigned char no_ack = 0x00;
     unsigned char ack_p0 = 0x01;
@@ -155,9 +155,10 @@ void receiveByteNRF(){
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
         };        //wait for data to be received 
 
-        readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+        unsigned char *temp_buffer = readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
+        memcpy(buffer, temp_buffer, 32); // copy data to original buffer
 
-        printTempData(buffer, 32); //see what the temp data is
+        printTempData(temp_buffer, 32); //see what the temp data is
 
         clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
         clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
