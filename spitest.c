@@ -28,6 +28,23 @@ unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
 unsigned char FIFO_STATUS = 0x17;
 
+
+const unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
+
+const unsigned char DUMMY = 0x00; 
+const unsigned char NO_ACK = 0x00;
+const unsigned char ACK_PO1 = 0x01;
+const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
+const unsigned char PAYLOAD_SIZE = 0x20; // Variable to hold the payload size
+const unsigned char RFSETUP = 0x00; // Variable to hold the RF setup value
+const unsigned char CONFIGPRX = 0x0B; // Variable to hold the PRX mode config
+const unsigned char CONFIGPOWERDOWN = 0x09; // Variable to hold the power down config
+
+const unsigned char PIPE0 = 0x01; // Variable to hold the pipe 0 value
+const unsigned char CLEAR_IRQRX = 0x40; // Variable to hold the clear RX IRQ value for the status register
+const unsigned char CLEAR_IRQTX = 0x20; // Variable to hold the clear TX IRQ value for the status register
+const unsigned char CLEAR_RET = 0x10; // Variable to hold the clear retransmit value for the status register
+
 int main()
 {
     int fd, result;
@@ -109,77 +126,56 @@ void receiveByteNRF(){
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF}; 
-    unsigned char dummy = 0x00; 
-    unsigned char no_ack = 0x00;
-    unsigned char ack_p0 = 0x01;
-    unsigned char addressWidth = 0x01; // Variable to hold the address width
-    unsigned char payload_size = 0x20; // Variable to hold the payload size
-    unsigned char rfSetup = 0x00; // Variable to hold the RF setup value
-    unsigned char configPRX = 0x0B; // Variable to hold the PRX mode config
-    unsigned char configPowerDown = 0x09; // Variable to hold the power down config
-    unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
-    unsigned char pipe0 = 0x01; // Variable to hold the pipe 0 value
-    unsigned char clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
-    unsigned char clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
-    unsigned char clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
-    unsigned char clear = 0x01;
-    unsigned char dummydata = 0xFF;
 
     commandNRF_SPI(FLUSH_RX_NRF); //send command to flush RX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
-    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
-    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
-    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
+    readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); //reset interrupt bits
+    readwriteNRF_SPI(STATUS, &CLEAR_IRQRX, 1, WRITE_REG_NRF, 0); 
+    readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
 
 
-    readwriteNRF_SPI(SETUP_AW, &addressWidth, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
+    readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF, 0); //set read address
-    readwriteNRF_SPI(ENAA, &ack_p0, 1, WRITE_REG_NRF, 0); //enable auto-ack for pipe 0
-    readwriteNRF_SPI(EN_RXADDR, &pipe0, 1, WRITE_REG_NRF, 0); //set RX address to enable pipe 0
-    readwriteNRF_SPI(RX_PW_P0, &payload_size, 1, WRITE_REG_NRF, 0); //set payload size 
+    readwriteNRF_SPI(ENAA, &ACK_PO1, 1, WRITE_REG_NRF, 0); //enable auto-ack for pipe 0
+    readwriteNRF_SPI(EN_RXADDR, &PIPE0, 1, WRITE_REG_NRF, 0); //set RX address to enable pipe 0
+    readwriteNRF_SPI(RX_PW_P0, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size 
     
-    readwriteNRF_SPI(RF_SETUP, &rfSetup, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 1Mbps, RF output power to -18dBm
+    readwriteNRF_SPI(RF_SETUP, &RFSETUP, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 1Mbps, RF output power to -18dBm
     
-    readwriteNRF_SPI(CONFIG_REG, &configPRX, 1, WRITE_REG_NRF, 0); //set to PRX mode and set power on bit
+    readwriteNRF_SPI(CONFIG_REG, &CONFIGPRX, 1, WRITE_REG_NRF, 0); //set to PRX mode and set power on bit
     my_delay(2); 
 
     digitalWrite(15, HIGH); //enable chip to receive data by setting CE HIGH
     my_delay(1);
     my_delay(1);
 
-    readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF, 0); //read FIFO status register
-    readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
+    readwriteNRF_SPI(FIFO_STATUS, &DUMMY, 1, READ_REG_NRF, 0); //read FIFO status register
+    readwriteNRF_SPI(STATUS, &DUMMY, 1, READ_REG_NRF, 0);
 
    while(1){
         printf("Got inside loop");
-        readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
-        while(!(dummy & (1 << 6))){                         //wait for data to be received 
-            readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
+        readwriteNRF_SPI(STATUS, &DUMMY, 1, READ_REG_NRF, 1);
+        while(!(DUMMY & (1 << 6))){                         //wait for data to be received 
+            readwriteNRF_SPI(STATUS, &DUMMY, 1, READ_REG_NRF, 1);
         };        
 
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF, 1); //read data from RX FIFO
 
         printTempData(buffer, 32); //see what the temp data is
 
-        clear_irqrx = 0x40; // Variable to hold the clear RX IRQ value for the status register
-        clear_irqtx = 0x20; // Variable to hold the clear TX IRQ value for the status register
-        clear_ret = 0x10; // Variable to hold the clear retransmit value for the status register
-        readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
-        readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
-        readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
+        readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); //reset interrupt bits
+        readwriteNRF_SPI(STATUS, &CLEAR_IRQRX, 1, WRITE_REG_NRF, 0); 
+        readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
     }
 
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
 
-    printf("Data received : %d\n", buffer[0]);
-    printBuffer(buffer, 32); //see what's in that buffer
+    readwriteNRF_SPI(CONFIG_REG, &CONFIGPOWERDOWN, 1, WRITE_REG_NRF, 0); //power down by writing to config register
 
-    readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF, 0); //power down by writing to config register
-
-    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
-    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
-    readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
+    readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); //reset interrupt bits
+    readwriteNRF_SPI(STATUS, &CLEAR_IRQRX, 1, WRITE_REG_NRF, 0); 
+    readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
 }
 
 /**
