@@ -31,7 +31,6 @@ unsigned char FIFO_STATUS = 0x17;
 
 const unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
 
-const unsigned char DUMMY = 0x00; 
 const unsigned char NO_ACK = 0x00;
 const unsigned char ACK_PO1 = 0x01;
 const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
@@ -126,7 +125,8 @@ void receiveByteNRF(){
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF}; 
-
+    unsigned char dummy = 0x00; 
+    
     commandNRF_SPI(FLUSH_RX_NRF); //send command to flush RX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
