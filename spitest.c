@@ -62,7 +62,7 @@ int main()
  * @param buffer: Pointer to data buffer that stores the data read
  * @param len: Number of bytes of data to be read
  */
-unsigned char * readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){//TODO fix buffer argument to not be a pointer
+void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){//TODO fix buffer argument to not be a pointer
     unsigned char new_buffer[len+1];
     unsigned char command_arr[1] = {command | reg_addr};
 	int result;
@@ -77,9 +77,7 @@ unsigned char * readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer,
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
-    //copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
-    return &new_buffer[1];
-    //TODO instead of copying new_buffer into buffer, return pointer to new_buffer starting at byte 1. 
+    copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
 }
 
 /**
