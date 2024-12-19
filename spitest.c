@@ -64,7 +64,7 @@ int main()
  * @param command: Command to be sent to the NRF24L01+
  * @param readMode: Boolean value to determine if the data is being read or written
  */
-void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command, unsigned char readMode){//TODO fix buffer argument to not be a pointer
+void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command, int readMode){//TODO fix buffer argument to not be a pointer
     unsigned char new_buffer[len+1];
     unsigned char command_arr[1] = {command | reg_addr};
 	int result;
@@ -152,9 +152,9 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
 
    while(1){
-        readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
+        readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         while(!(dummy & (1 << 6))){                         //wait for data to be received 
-            readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
+            readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         };        
 
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF, 1); //read data from RX FIFO
