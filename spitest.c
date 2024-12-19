@@ -167,6 +167,14 @@ void receiveByteNRF(){
         readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); 
         readwriteNRF_SPI(STATUS, &CLEAR_IRQRX, 1, WRITE_REG_NRF, 0); 
         readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
+
+        //switch to standby-I mode by setting CE low
+        digitalWrite(15, LOW); 
+        //wait for ~10 seconds 
+        my_delay(9999);
+        //switch to RX mode by setting CE high
+        digitalWrite(15, HIGH); 
+
     }
 
     digitalWrite(15, LOW); //switch chip to standby mode by setting CE pin low
