@@ -81,6 +81,29 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
 }
 
 /**
+ * @brief reads from the SPI bus
+ * @param reg_addr: Address of the register where data is going to be read from
+ * @param buffer: Pointer to data buffer that stores the data read
+ * @param len: Number of bytes of data to be read
+ */
+void writeNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command){//TODO fix buffer argument to not be a pointer
+    unsigned char new_buffer[len+1];
+    unsigned char command_arr[1] = {command | reg_addr};
+	int result;
+	
+	new_buffer[0] = command | reg_addr; 
+
+    copy_Buffer(buffer, new_buffer, len, 1, command_arr);
+
+    result = wiringPiSPIDataRW(CHANNEL, new_buffer, len+1);
+
+    if (result == -1) {
+        printf(stderr, "SPI communication failed\n");
+        return; // Handle SPI error
+    }
+}
+
+/**
  * @brief Send command to NRF24L01+ 
  * @param command: Command to be sent to the NRF24L01+
  */
@@ -124,7 +147,7 @@ void receiveByteNRF(){
     commandNRF_SPI(FLUSH_RX_NRF); //send command to flush RX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
-    readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
+    writeNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF); 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF); 
 
@@ -149,12 +172,11 @@ void receiveByteNRF(){
 
    while(1){
         readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
-        while(!(dummy & (1 << 6))){
+        while(!(dummy & (1 << 6))){                         //wait for data to be received 
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF);
-        };        //wait for data to be received 
+        };        
 
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF); //read data from RX FIFO
-        //memcpy(buffer, temp_buffer, 32); // copy data to original buffer
 
         printTempData(buffer, 32); //see what the temp data is
 
