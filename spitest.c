@@ -178,7 +178,7 @@ void receiveByteNRF(){
     readwriteNRF_SPI(CONFIG_REG, &configPowerDown, 1, WRITE_REG_NRF, 0); //power down by writing to config register
 
     readwriteNRF_SPI(STATUS, &clear_ret, 1, WRITE_REG_NRF, 0); //reset interrupt bits
-    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF), 0; 
+    readwriteNRF_SPI(STATUS, &clear_irqrx, 1, WRITE_REG_NRF, 0); 
     readwriteNRF_SPI(STATUS, &clear_irqtx, 1, WRITE_REG_NRF, 0); 
 }
 
