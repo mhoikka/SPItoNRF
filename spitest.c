@@ -77,7 +77,6 @@ void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, u
         printf(stderr, "SPI communication failed\n");
         return; // Handle SPI error
     }
-    copy_Buffer(&new_buffer[1], buffer, len, 0, command_arr);
 }
 
 /**
@@ -228,10 +227,11 @@ void printTempData(unsigned char * buffer, int len){
 
 /**
  * @brief  copy array with offset
- * @param  buffer: pointer to buffer that will be printed
- * @param  new_buffer: pointer to buffer that will be printed
+ * @param  buffer: pointer to buffer that is being copied
+ * @param  new_buffer: pointer to buffer that is being copied to
  * @param  len: length of buffer
- * @param  offset: offset to start copying from
+ * @param  offset: offset before copying buffer into new_buffer
+ * @param  command: unsigned char command to be copied into index 0 of new_buffer
  * @retval None
  */
 void copy_Buffer(unsigned char * buffer, unsigned char * new_buffer, int len, int offset, unsigned char * command){
