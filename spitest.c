@@ -29,7 +29,7 @@ unsigned char FLUSH_RX_NRF = 0xE2;
 unsigned char FIFO_STATUS = 0x17;
 
 
-const unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
+unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
 
 const unsigned char NO_ACK = 0x00;
 const unsigned char ACK_PO1 = 0x01;
@@ -126,14 +126,14 @@ void receiveByteNRF(){
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                 0xFF, 0xFF}; 
     unsigned char dummy = 0x00; 
-    
+    printf("1.00\n");
     commandNRF_SPI(FLUSH_RX_NRF); //send command to flush RX FIFO
     commandNRF_SPI(FLUSH_TX_NRF); //send command to flush TX FIFO
     //set control registers
     readwriteNRF_SPI(STATUS, &CLEAR_RET, 1, WRITE_REG_NRF, 0); //reset interrupt bits
     readwriteNRF_SPI(STATUS, &CLEAR_IRQRX, 1, WRITE_REG_NRF, 0); 
     readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
-
+    printf("1.01\n");
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
     readwriteNRF_SPI(RX_ADDR_P0, rxAddress, 3, WRITE_REG_NRF, 0); //set read address
