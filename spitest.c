@@ -29,7 +29,7 @@ unsigned char FLUSH_RX_NRF = 0xE2;
 unsigned char FIFO_STATUS = 0x17;
 
 
-unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
+const unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address
 
 const unsigned char NO_ACK = 0x00;
 const unsigned char ACK_PO1 = 0x01;
@@ -150,14 +150,14 @@ void receiveByteNRF(){
     my_delay(1);
     my_delay(1);
 
-    readwriteNRF_SPI(FIFO_STATUS, &DUMMY, 1, READ_REG_NRF, 0); //read FIFO status register
-    readwriteNRF_SPI(STATUS, &DUMMY, 1, READ_REG_NRF, 0);
+    readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF, 0); //read FIFO status register
+    readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
 
    while(1){
         printf("Got inside loop");
-        readwriteNRF_SPI(STATUS, &DUMMY, 1, READ_REG_NRF, 1);
+        readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         while(!(DUMMY & (1 << 6))){                         //wait for data to be received 
-            readwriteNRF_SPI(STATUS, &DUMMY, 1, READ_REG_NRF, 1);
+            readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         };        
 
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF, 1); //read data from RX FIFO
