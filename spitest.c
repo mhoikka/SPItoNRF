@@ -156,7 +156,7 @@ void receiveByteNRF(){
    while(1){
         printf("Got inside loop");
         readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
-        while(!(DUMMY & (1 << 6))){                         //wait for data to be received 
+        while(!(dummy & (1 << 6))){                         //wait for data to be received 
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         };        
 
