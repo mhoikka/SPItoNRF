@@ -169,7 +169,7 @@ void receiveByteNRF(){
         readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
 
         digitalWrite(15, LOW); //switch to standby-I mode by setting CE low
-        my_delay(1); //my_delay(9999); //wait for ~10 seconds 
+        my_delay(9999); //wait for ~10 seconds 
         digitalWrite(15, HIGH); //switch to RX mode by setting CE high
 
     }
