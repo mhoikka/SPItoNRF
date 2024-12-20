@@ -139,7 +139,7 @@ void receiveByteNRF(){
 
     unsigned char enabledPipes = 0x00; //each 1 in the binary representation of this number corresponds to an enabled pipe
     //enable all pipes in the 'enabledPipes' array
-    enableDataPipe(enabledPipes);
+    enableDataPipes(enabledPipes);
 
     readwriteNRF_SPI(RF_SETUP, &RFSETUP, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 1Mbps, RF output power to -18dBm
     
