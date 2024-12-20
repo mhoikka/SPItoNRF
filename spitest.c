@@ -186,6 +186,11 @@ void receiveByteNRF(){
     readwriteNRF_SPI(STATUS, &CLEAR_IRQTX, 1, WRITE_REG_NRF, 0); 
 }
 
+/**
+ * @brief  Enable data pipes for NRF24L01+
+ * @param  pipes: unsigned char that represents the pipes to be enabled, one hot encoded
+ * @retval None
+ */
 void enableDataPipes(unsigned char pipes){
     //these variables are iterated for each pipe
     unsigned char pipePayloadAddr = 0x00; 
