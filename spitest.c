@@ -192,11 +192,9 @@ void enableDataPipes(unsigned char pipes){
     unsigned char PipeEnAA = 0x00;
     unsigned char autoAck = 0x00;
     unsigned char RX_ADDR_Px = 0x00;
-    
+
     for (int pipe = 0; pipe < 6; pipe++){
-        printf("1.00");
-        if (pipes & (1 << pipe)){ 
-            printf("%d\n", pipe);
+        if (pipes & (1 << pipe)){ //if the pipe is enabled
             PipeEnAA |= (0x01 << pipe);
             autoAck |= (0x01 << pipe);
             RX_ADDR_Px = 0x0A + pipe; //set RX address for pipe
