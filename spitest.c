@@ -199,8 +199,8 @@ void enableDataPipes(unsigned char pipes){
     unsigned char significance = 256;
     printf("Enabling data pipe%c ", plural);
     for (int pipe = 0; pipe < 6; pipe++){
-        significance /= 2;
         remainder %= significance;
+        significance /= 2;
         if (pipes & (1 << pipe)){ //if the pipe is enabled
             printf("%d", pipe);
             unsigned char comma = remainder != 0 ? ',' : '\0'; //logic for commas in list of pipes
