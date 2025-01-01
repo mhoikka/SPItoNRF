@@ -203,7 +203,6 @@ void enableDataPipes(unsigned char pipes){
             printf("%d", pipe);
             unsigned char comma = remainder % significance != 0 ? ',' : '\0'; //logic for commas in list of pipes
             printf("%c ", comma);
-            printf(" ");
 
             PipeEnAA |= (1 << pipe);
             autoAck |= (1 << pipe);
