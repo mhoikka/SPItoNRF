@@ -137,7 +137,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x02; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 1-6
+    unsigned char enabledPipes = 0x02; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
     //enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
@@ -200,11 +200,16 @@ void enableDataPipes(unsigned char pipes){
         if (pipes & (1 << pipe)){ //if the pipe is enabled
             printf("Enabling data pipe %d\n", pipe);
             PipeEnAA |= (1 << pipe);
+            printf("Pipe %d PipeEnAA %d\n", pipe, PipeEnAA);
             autoAck |= (1 << pipe);
-            RX_ADDR_Px = 0x0A + pipe; //set RX address for pipe
+            printf("Pipe %d autoAck %d\n", pipe, autoAck);
+            RX_ADDR_Px = 0x0A + pipe; //calculate RX address for pipe
+            printf("Pipe %d RX_ADDR_Px %d\n", pipe, RX_ADDR_Px);
             pipePayloadAddr = RX_PW_P0 + pipe; 
+            printf("Pipe %d pipePayloadAddr %d\n", pipe, pipePayloadAddr);
 
             rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
+            printf("Pipe %d rxAddress %d %d %d\n", pipe, rxAddress[0],rxAddress[1],rxAddress[2]);
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
