@@ -214,6 +214,7 @@ void enableDataPipes(unsigned char pipes){
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
+        remainder %= significance;
     }
     printf("\n");
     readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
