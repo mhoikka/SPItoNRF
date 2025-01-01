@@ -84,7 +84,7 @@ int main()
  * @param command: Command to be sent to the NRF24L01+
  * @param readMode: Boolean value to determine if the data is being read or written
  */
-void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command, int readMode){//TODO fix buffer argument to not be a pointer
+void readwriteNRF_SPI(unsigned char reg_addr, unsigned char * buffer, int len, unsigned char command, int readMode){
     unsigned char new_buffer[len+1];
     unsigned char command_arr[1] = {command | reg_addr};
 	int result;
@@ -140,8 +140,8 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x03; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
-    //enable all pipes in the 'enabledPipes' variable
+    unsigned char enabledPipes = 0x3F; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
+    //0x3F enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
     readwriteNRF_SPI(RF_SETUP, &RFSETUP, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 1Mbps, RF output power to -18dBm
@@ -162,7 +162,8 @@ void receiveByteNRF(){
         while(!(dummy & (1 << 6))){                         //wait for data to be received 
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         };        
-
+        
+        printf("Data pipe %d\n", dummy & 0x07); //print the data pipe that the data was received on
         readwriteNRF_SPI(0x00, buffer, 32, READ_PAYLOAD_NRF, 1); //read data from RX FIFO
 
         printTempData(buffer, 32); //see what the temp data is
@@ -197,13 +198,13 @@ void enableDataPipes(unsigned char pipes){
     unsigned char plural = (pipes != 1 && pipes != 2 && pipes != 4 && pipes != 8 && pipes != 16 && pipes != 32) ? 's' : '\0';
     unsigned char remainder = pipes;
     unsigned char significance = 1;
-    printf("Enabling data pipe%c ", plural);
+    printf("Enabling data pipe%c ", plural); //make the word pipes plural if there is more than one pipe enabled
     for (int pipe = 0; pipe < 6; pipe++){
         significance = 1 << pipe; //signifiance of the current pipe
         if (pipes & (1 << pipe)){ //if the pipe is enabled
             printf("%d", pipe);
             remainder -= significance;
-            unsigned char comma = (remainder == 0) ? '\0' : ',';
+            unsigned char comma = (remainder == 0) ? '\0' : ','; //comma logic for list of pipes
             printf("%c ", comma);
 
             PipeEnAA |= (1 << pipe);
