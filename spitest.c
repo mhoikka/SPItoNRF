@@ -155,10 +155,10 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(FIFO_STATUS, &dummy, 1, READ_REG_NRF, 0); //read FIFO status register
     readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 0);
+    printf("Waiting for transmission...\n");
 
    while(1){
         readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
-        printf("Waiting for transmission...\n");
         while(!(dummy & (1 << 6))){                         //wait for data to be received 
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         };        
@@ -194,24 +194,22 @@ void receiveByteNRF(){
  */
 void enableDataPipes(unsigned char pipes){
 
+    unsigned char plural = (pipes > 1) ? 's' : '\0';
+    printf("Enabling data pipe%c ", plural);
     for (int pipe = 0; pipe < 6; pipe++){
         if (pipes & (1 << pipe)){ //if the pipe is enabled
-            printf("Enabling data pipe %d\n", pipe);
+            printf("%d ", pipe);
             PipeEnAA |= (1 << pipe);
-            printf("Pipe %d PipeEnAA %d\n", pipe, PipeEnAA);
             autoAck |= (1 << pipe);
-            printf("Pipe %d autoAck %d\n", pipe, autoAck);
             RX_ADDR_Px = 0x0A + pipe; //calculate RX address for pipe
-            printf("Pipe %d RX_ADDR_Px %d\n", pipe, RX_ADDR_Px);
             pipePayloadAddr = RX_PW_P0 + pipe; 
-            printf("Pipe %d pipePayloadAddr %d\n", pipe, pipePayloadAddr);
 
             rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
-            printf("Pipe %d rxAddress %d %d %d\n", pipe, rxAddress[0],rxAddress[1],rxAddress[2]);
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
     }
+    printf("\n");
     readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
     readwriteNRF_SPI(ENAA, &autoAck, 1, WRITE_REG_NRF, 0); //enable auto-ack for data pipes
 }
