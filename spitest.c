@@ -195,15 +195,15 @@ void receiveByteNRF(){
 void enableDataPipes(unsigned char pipes){
 
     unsigned char plural = (pipes != 1 && pipes != 2 && pipes != 4 && pipes != 8 && pipes != 16 && pipes != 32) ? 's' : '\0';
-    short remainder = pipes;
-    short significance = 256;
+    unsigned char remainder = pipes;
+    unsigned char significance = 1;
     printf("Enabling data pipe%c ", plural);
     for (int pipe = 0; pipe < 6; pipe++){
-        remainder %= (significance - 1);
-        significance = significance / 2;
+        significance = 1 << pipe; //signifiance of the current pipe
         if (pipes & (1 << pipe)){ //if the pipe is enabled
             printf("%d", pipe);
-            unsigned char comma = remainder != 0 ? ',' : '\0'; //logic for commas in list of pipes
+            remainder -= significance;
+            unsigned char comma = (remainder == 0) ? '\0' : ',';
             printf("%c ", comma);
 
             PipeEnAA |= (1 << pipe);
