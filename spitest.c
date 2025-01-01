@@ -35,7 +35,7 @@ unsigned char FLUSH_RX_NRF = 0xE2;
 unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address for NRF24L01+ pipe 0
 const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
 const unsigned char PAYLOAD_SIZE = 0x20; // Variable to hold the payload size
-const unsigned char RFSETUP = 0x00; // Variable to hold the RF setup value
+const unsigned char RFSETUP = 0x0E; // Variable to hold the RF setup value
 const unsigned char CONFIGPRX = 0x0B; // Variable to hold the PRX mode config
 const unsigned char CONFIGPOWERDOWN = 0x09; // Variable to hold the power down config
 const unsigned char CLEAR_IRQRX = 0x40; // Variable to hold the clear RX IRQ value for the status register
@@ -144,7 +144,7 @@ void receiveByteNRF(){
     //0x3F enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
-    readwriteNRF_SPI(RF_SETUP, &RFSETUP, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 1Mbps, RF output power to -18dBm
+    readwriteNRF_SPI(RF_SETUP, &RFSETUP, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 2Mbps, RF output power to 0dBm
     
     readwriteNRF_SPI(CONFIG_REG, &CONFIGPRX, 1, WRITE_REG_NRF, 0); //set to PRX mode and set power on bit
     my_delay(2); 
@@ -259,7 +259,6 @@ void printBuffer(unsigned char * buffer, int len){
  * @retval None
  */
 void printTempData(unsigned char * buffer, int len){
-    printf("\n");
     int temp = buffer[0] | buffer[1] << 8 | buffer[2] << 16 | buffer[3] << 24;
     printf("%d C\n", temp);
     unsigned int pressure = buffer[4] | buffer[5] << 8 | buffer[6] << 16 | buffer[7] << 24;
