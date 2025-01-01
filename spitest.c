@@ -194,7 +194,7 @@ void receiveByteNRF(){
  */
 void enableDataPipes(unsigned char pipes){
 
-    unsigned char plural = (pipes > 1) ? 's' : '\0';
+    unsigned char plural = (pipes != 1 && pipes != 2 && pipes != 4 && pipes != 8 && pipes != 16 && pipes != 32) ? 's' : '\0';
     printf("Enabling data pipe%c ", plural);
     for (int pipe = 0; pipe < 6; pipe++){
         if (pipes & (1 << pipe)){ //if the pipe is enabled
@@ -253,12 +253,12 @@ void printBuffer(unsigned char * buffer, int len){
 void printTempData(unsigned char * buffer, int len){
     printf("\n");
     int temp = buffer[0] | buffer[1] << 8 | buffer[2] << 16 | buffer[3] << 24;
-    printf("Ambient Temperature: %d C\n", temp);
+    printf("%d C\n", temp);
     unsigned int pressure = buffer[4] | buffer[5] << 8 | buffer[6] << 16 | buffer[7] << 24;
     double pressure_kPa = pressure / 1000.0;
-    printf("Ambient Pressure:    %.3lf kPa\n", pressure_kPa);
+    printf("%.3lf kPa\n", pressure_kPa);
     unsigned int humidity = buffer[8]  | buffer[9] << 8 | buffer[10] << 16 | buffer[11] << 24;
-    printf("Ambient Humidity:    %d%%\n", humidity);
+    printf("%d%%\n", humidity);
     printf("\n");
 }
 
