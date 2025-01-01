@@ -140,7 +140,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x02; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
+    unsigned char enabledPipes = 0x03; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
     //enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
@@ -202,7 +202,7 @@ void enableDataPipes(unsigned char pipes){
         if (pipes & (1 << pipe)){ //if the pipe is enabled
             printf("%d", pipe);
             unsigned char comma = remainder % significance != 0 ? ',' : '\0'; //logic for commas in list of pipes
-            printf("%d ", comma);
+            printf("%c ", comma);
             printf(" ");
 
             PipeEnAA |= (1 << pipe);
