@@ -195,8 +195,8 @@ void receiveByteNRF(){
 void enableDataPipes(unsigned char pipes){
 
     unsigned char plural = (pipes != 1 && pipes != 2 && pipes != 4 && pipes != 8 && pipes != 16 && pipes != 32) ? 's' : '\0';
-    unsigned char remainder = pipes;
-    unsigned char significance = 256;
+    short remainder = pipes;
+    short significance = 256;
     printf("Enabling data pipe%c ", plural);
     for (int pipe = 0; pipe < 6; pipe++){
         remainder %= (significance - 1);
