@@ -195,10 +195,16 @@ void receiveByteNRF(){
 void enableDataPipes(unsigned char pipes){
 
     unsigned char plural = (pipes != 1 && pipes != 2 && pipes != 4 && pipes != 8 && pipes != 16 && pipes != 32) ? 's' : '\0';
+    unsigned char remainder = pipes;
+    unsigned char significance = 256;
     printf("Enabling data pipe%c ", plural);
     for (int pipe = 0; pipe < 6; pipe++){
         if (pipes & (1 << pipe)){ //if the pipe is enabled
-            printf("%d ", pipe);
+            printf("%d", pipe);
+            unsigned char comma = remainder % significance != 0 ? ',' : '\0'; //logic for commas in list of pipes
+            printf("%d ", comma);
+            printf(" ");
+
             PipeEnAA |= (1 << pipe);
             autoAck |= (1 << pipe);
             RX_ADDR_Px = 0x0A + pipe; //calculate RX address for pipe
@@ -208,6 +214,7 @@ void enableDataPipes(unsigned char pipes){
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
+        significance /= 2;
     }
     printf("\n");
     readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
