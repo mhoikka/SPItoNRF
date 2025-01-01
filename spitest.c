@@ -62,7 +62,7 @@ int main()
     // Initialize WiringPi 
     wiringPiSetup();
 
-    pinMode(15, OUTPUT); //set CE pin to output
+    pinMode(15, OUTPUT); //set CE pin to output //THESE ARE WIRINGPI PIN NUMBERS
     pinMode(3, INPUT); //set IRQ pin to input
 
     pullUpDnControl(15, PUD_DOWN); //enable pull-down resistor on CE pin
@@ -137,8 +137,8 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x01; //each 1 in the binary representation of this number corresponds to an enabled pipe
-    //enable all pipes in the 'enabledPipes' array
+    unsigned char enabledPipes = 0x02; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 1-6
+    //enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
     readwriteNRF_SPI(RF_SETUP, &RFSETUP, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 1Mbps, RF output power to -18dBm
@@ -155,6 +155,7 @@ void receiveByteNRF(){
 
    while(1){
         readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
+        printf("Waiting for transmission...\n");
         while(!(dummy & (1 << 6))){                         //wait for data to be received 
             readwriteNRF_SPI(STATUS, &dummy, 1, READ_REG_NRF, 1);
         };        
@@ -207,8 +208,8 @@ void enableDataPipes(unsigned char pipes){
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
     }
-    readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable pipe 0
-    readwriteNRF_SPI(ENAA, &autoAck, 1, WRITE_REG_NRF, 0); //enable auto-ack for pipe 0
+    readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
+    readwriteNRF_SPI(ENAA, &autoAck, 1, WRITE_REG_NRF, 0); //enable auto-ack for data pipes
 }
 
 /**
