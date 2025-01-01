@@ -199,6 +199,7 @@ void enableDataPipes(unsigned char pipes){
     unsigned char significance = 256;
     printf("Enabling data pipe%c ", plural);
     for (int pipe = 0; pipe < 6; pipe++){
+        significance /= 2;
         if (pipes & (1 << pipe)){ //if the pipe is enabled
             printf("%d", pipe);
             unsigned char comma = remainder % significance != 0 ? ',' : '\0'; //logic for commas in list of pipes
@@ -213,7 +214,6 @@ void enableDataPipes(unsigned char pipes){
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
-        significance /= 2;
     }
     printf("\n");
     readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
