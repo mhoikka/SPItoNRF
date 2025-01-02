@@ -219,9 +219,9 @@ void enableDataPipes(unsigned char pipes){
             }
             else{
                 if (pipe == 0x01){
-                    rxAddress[0] = 0x93; //unique address for pipe 0
+                    rxAddress[0] = 0x93; //unique address for pipe 0 //This is the real deciding byte of the address
                     rxAddress[1] = 0xBD;
-                    rxAddress[2] = 0x6A + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
+                    rxAddress[2] = 0x6B; //increment the address by the pipe number to ensure unique addresses for each pipe
                     readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
                 }
                 else{
