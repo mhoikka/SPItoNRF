@@ -32,7 +32,7 @@ unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
 
 //Data for NRF24L01+
-unsigned char rxAddress[3] = {0x93, 0xBD, 0x6D}; // Variable to hold the RX address for NRF24L01+ pipe 0
+unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address for NRF24L01+ pipe 0
 const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
 const unsigned char PAYLOAD_SIZE = 0x20; // Variable to hold the payload size
 const unsigned char RFSETUP = 0x0E; // Variable to hold the RF setup value
@@ -140,7 +140,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x01; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
+    unsigned char enabledPipes = 0x03; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
     //0x3F enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
@@ -212,7 +212,7 @@ void enableDataPipes(unsigned char pipes){
             RX_ADDR_Px = 0x0A + pipe; //calculate RX address for pipe
             pipePayloadAddr = RX_PW_P0 + pipe; 
 
-            rxAddress[2] = 0x6D + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
+            rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
