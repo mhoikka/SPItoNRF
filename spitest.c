@@ -140,7 +140,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x03; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
+    unsigned char enabledPipes = 0x3F; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
     enableDataPipes(enabledPipes);
 
     readwriteNRF_SPI(RF_SETUP, &RFSETUP, 1, WRITE_REG_NRF, 0); //set RF Data Rate to 2Mbps, RF output power to 0dBm
@@ -218,7 +218,7 @@ void enableDataPipes(unsigned char pipes){
                 readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             }
             else{
-                if (pipe == 0x01){
+                if (1){
                     rxAddress[0] = 0x93; //unique address for pipe 0
                     rxAddress[1] = 0xBD;
                     rxAddress[2] = 0x6A + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
