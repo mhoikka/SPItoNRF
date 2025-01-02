@@ -221,7 +221,7 @@ void enableDataPipes(unsigned char pipes){
     readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
     printf("PipeEnAA %x\n", PipeEnAA);
     readwriteNRF_SPI(ENAA, &autoAck, 1, WRITE_REG_NRF, 0);       //enable auto-ack for data pipes
-    printf("autoAck %x\n", autoAck;
+    printf("autoAck %x\n", autoAck);
 }
 
 /**
