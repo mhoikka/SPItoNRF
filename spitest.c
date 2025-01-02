@@ -140,7 +140,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x3F; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
+    unsigned char enabledPipes = 0x03; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
     //0x3F enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
@@ -201,7 +201,7 @@ void enableDataPipes(unsigned char pipes){
     printf("Enabling data pipe%c ", plural); //make the word 'pipe' plural if there is more than one pipe enabled
     for (unsigned char pipe = 0; pipe < 6; ++pipe){
         significance = 1 << pipe; //significance of the current pipe
-        if (pipes & (1 << pipe)){ //if the pipe should be enabled
+        if (pipes & (1 << pipe)){ //if the pipe should enabled
             printf("%d", pipe);
             remainder -= significance;
             unsigned char comma = (remainder == 0) ? '\0' : ','; //comma logic for list of pipes
@@ -212,18 +212,8 @@ void enableDataPipes(unsigned char pipes){
             RX_ADDR_Px = 0x0A + pipe; //calculate RX address for pipe
             pipePayloadAddr = RX_PW_P0 + pipe; 
 
-            if(pipe == 0){
-                rxAddress[0] = 0x91; //unique address for pipe 0
-                rxAddress[1] = 0xB3;
-                rxAddress[2] = 0x60;
-            }
-            else{
-                rxAddress[0] = 0x93; //unique address for pipe 0
-                rxAddress[1] = 0xBD;
-                rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
-                readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
-            }
-            //readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
+            rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
+            readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
     }
