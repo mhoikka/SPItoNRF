@@ -35,7 +35,7 @@ unsigned char FLUSH_RX_NRF = 0xE2;
 unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address for NRF24L01+ pipe 0
 const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
 const unsigned char PAYLOAD_SIZE = 0x20; // Variable to hold the payload size
-const unsigned char RFSETUP = 0x00; // Variable to hold the RF setup value
+const unsigned char RFSETUP = 0x0E; // Variable to hold the RF setup value
 const unsigned char CONFIGPRX = 0x0B; // Variable to hold the PRX mode config
 const unsigned char CONFIGPOWERDOWN = 0x09; // Variable to hold the power down config
 const unsigned char CLEAR_IRQRX = 0x40; // Variable to hold the clear RX IRQ value for the status register
@@ -198,7 +198,7 @@ void enableDataPipes(unsigned char pipes){
     unsigned char plural = (pipes != 1 && pipes != 2 && pipes != 4 && pipes != 8 && pipes != 16 && pipes != 32) ? 's' : '\0';
     unsigned char remainder = pipes;
     unsigned char significance = 1;
-    printf("Enabling data pipe%c ", plural); //make the word pipes plural if there is more than one pipe enabled
+    printf("Enabling data pipe%c ", plural); //make the word 'pipe' plural if there is more than one pipe enabled
     for (int pipe = 0; pipe < 6; pipe++){
         significance = 1 << pipe; //signifiance of the current pipe
         if (pipes & (1 << pipe)){ //if the pipe is enabled
