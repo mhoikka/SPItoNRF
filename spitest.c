@@ -215,7 +215,9 @@ void enableDataPipes(unsigned char pipes){
             printf("pipePayloadAddr %x\n", pipePayloadAddr);
 
             if(pipe == 0){
-                rxAddress = {0x91, 0xB3, 0x60}; //unique address for pipe 0
+                rxAddress[0] = 0x91; //unique address for pipe 0
+                rxAddress[1] = 0xB3;
+                rxAddress[2] = 0x60;
             }
             else{
                 rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
