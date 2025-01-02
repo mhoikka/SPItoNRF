@@ -218,12 +218,12 @@ void enableDataPipes(unsigned char pipes){
                 rxAddress[2] = 0x60;
             }
             else{
-                if(pipe == 1){
+                //if(pipe == 1){
                     rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
                     readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
-                }else{
-                    readwriteNRF_SPI(RX_ADDR_Px, rxAddress[2], 1, WRITE_REG_NRF, 0); //set read address for pipe, only one unique byte for other pipes
-                }
+                //}else{
+                    //readwriteNRF_SPI(RX_ADDR_Px, rxAddress[2], 1, WRITE_REG_NRF, 0); //set read address for pipe, only one unique byte for other pipes
+                //}
             }
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
