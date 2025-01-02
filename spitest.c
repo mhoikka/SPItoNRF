@@ -226,6 +226,7 @@ void enableDataPipes(unsigned char pipes){
                 }
                 else{
                     rxAddress[2] = 0x6A + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
+                    printf("Last byte %x\n", rxAddress[2]);
                     unsigned char oneByteAddress = rxAddress[2];
                     readwriteNRF_SPI(RX_ADDR_Px, &oneByteAddress, 1, WRITE_REG_NRF, 0); //set read address for pipe
                 }
