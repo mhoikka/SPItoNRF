@@ -210,9 +210,7 @@ void enableDataPipes(unsigned char pipes){
             PipeEnAA |= (1 << pipe);
             autoAck |= (1 << pipe);
             RX_ADDR_Px = 0x0A + pipe; //calculate RX address for pipe
-            printf("RX_ADDR_Px %x\n", RX_ADDR_Px);
             pipePayloadAddr = RX_PW_P0 + pipe; 
-            printf("pipePayloadAddr %x\n", pipePayloadAddr);
 
             if(pipe == 0){
                 rxAddress[0] = 0x91; //unique address for pipe 0
@@ -223,7 +221,7 @@ void enableDataPipes(unsigned char pipes){
                 rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
                 readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
                 if(pipe > 1){
-                    readwriteNRF_SPI(RX_ADDR_Px, rxAddress[2], 3, WRITE_REG_NRF, 0); //set read address for pipe, only one unique byte for other pipes
+                    readwriteNRF_SPI(RX_ADDR_Px, rxAddress[2], 1, WRITE_REG_NRF, 0); //set read address for pipe, only one unique byte for other pipes
                 }
             }
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
@@ -231,9 +229,7 @@ void enableDataPipes(unsigned char pipes){
     }
     printf("\n");
     readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
-    printf("PipeEnAA %x\n", PipeEnAA);
     readwriteNRF_SPI(ENAA, &autoAck, 1, WRITE_REG_NRF, 0);       //enable auto-ack for data pipes
-    printf("autoAck %x\n", autoAck);
 }
 
 /**
