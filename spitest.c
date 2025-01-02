@@ -198,7 +198,7 @@ void enableDataPipes(unsigned char pipes){
     unsigned char remainder = pipes;
     unsigned char significance = 1;
     printf("Enabling data pipe%c ", plural); //make the word 'pipe' plural if there is more than one pipe enabled
-    for (unsigned char pipe = 0; pipe < 6; ++pipe){
+    for (unsigned char pipe = 0; pipe < 6; pipe++){
         significance = 1 << pipe; //significance of the current pipe
         if (pipes & (1 << pipe)){ //if the pipe should enabled
             printf("%d", pipe);
