@@ -140,7 +140,7 @@ void receiveByteNRF(){
 
     readwriteNRF_SPI(SETUP_AW, &ADDRESS_WIDTH, 1, WRITE_REG_NRF, 0); //set to 3 byte address width
 
-    unsigned char enabledPipes = 0x03; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
+    unsigned char enabledPipes = 0x01; //each 1 in the binary representation of this number corresponds to an enabled pipe in range pipes 0-5
     //0x3F enable all pipes in the 'enabledPipes' variable
     enableDataPipes(enabledPipes);
 
