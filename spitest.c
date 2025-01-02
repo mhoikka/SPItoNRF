@@ -213,15 +213,15 @@ void enableDataPipes(unsigned char pipes){
             pipePayloadAddr = RX_PW_P0 + pipe; 
 
             rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
-            printf("\nRX address: %x %x %x\n", rxAddress[0], rxAddress[1], rxAddress[2]);
-            printf("%x", RX_ADDR_Px);
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
     }
     printf("\n");
     readwriteNRF_SPI(EN_RXADDR, &PipeEnAA, 1, WRITE_REG_NRF, 0); //set RX address to enable data pipes
-    readwriteNRF_SPI(ENAA, &autoAck, 1, WRITE_REG_NRF, 0); //enable auto-ack for data pipes
+    printf("PipeEnAA %x\n", PipeEnAA);
+    readwriteNRF_SPI(ENAA, &autoAck, 1, WRITE_REG_NRF, 0);       //enable auto-ack for data pipes
+    printf("autoAck %x\n", autoAck;
 }
 
 /**
