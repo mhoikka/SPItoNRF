@@ -225,8 +225,8 @@ void enableDataPipes(unsigned char pipes){
                     readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
                 }
                 else{
-                    rxAddress[0] = 0x93 + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
-                    unsigned char oneByteAddress = rxAddress[0];
+                    rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
+                    unsigned char oneByteAddress = rxAddress[2];
                     readwriteNRF_SPI(RX_ADDR_Px, &oneByteAddress, 1, WRITE_REG_NRF, 0); //set read address for pipe
                 }
             }
