@@ -210,7 +210,9 @@ void enableDataPipes(unsigned char pipes){
             PipeEnAA |= (1 << pipe);
             autoAck |= (1 << pipe);
             RX_ADDR_Px = 0x0A + pipe; //calculate RX address for pipe
+            printf("RX_ADDR_Px %x\n", RX_ADDR_Px);
             pipePayloadAddr = RX_PW_P0 + pipe; 
+            printf("pipePayloadAddr %x\n", pipePayloadAddr);
 
             rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
