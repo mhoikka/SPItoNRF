@@ -32,7 +32,7 @@ unsigned char FLUSH_TX_NRF = 0xE1;
 unsigned char FLUSH_RX_NRF = 0xE2;
 
 //Data for NRF24L01+
-unsigned char rxAddress[3] = {0x93, 0xBD, 0x6B}; // Variable to hold the RX address for NRF24L01+ pipe 0
+unsigned char rxAddress[3] = {0x93, 0xBD, 0x6D}; // Variable to hold the RX address for NRF24L01+ pipe 0
 const unsigned char ADDRESS_WIDTH = 0x01; // Variable to hold the address width
 const unsigned char PAYLOAD_SIZE = 0x20; // Variable to hold the payload size
 const unsigned char RFSETUP = 0x0E; // Variable to hold the RF setup value
