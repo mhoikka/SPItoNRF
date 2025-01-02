@@ -213,6 +213,8 @@ void enableDataPipes(unsigned char pipes){
             pipePayloadAddr = RX_PW_P0 + pipe; 
 
             rxAddress[2] = 0x6B + pipe; //increment the address by the pipe number to ensure unique addresses for each pipe
+            printf("RX address: %d %d %d\n", rxAddress[0], rxAddress[1], rxAddress[2]);
+            printf("%d", RX_ADDR_Px);
             readwriteNRF_SPI(RX_ADDR_Px, rxAddress, 3, WRITE_REG_NRF, 0); //set read address for pipe
             readwriteNRF_SPI(pipePayloadAddr, &PAYLOAD_SIZE, 1, WRITE_REG_NRF, 0); //set payload size for pipe 
         }
